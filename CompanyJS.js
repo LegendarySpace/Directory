@@ -1,5 +1,7 @@
 
-app.controller("CompanyController", function ($scope) {
+app.controller("CompanyController", function ($scope, PageData) {
+    $scope.company = PageData.getCompany();
+    $scope.token = PageData.getToken();
     $scope.tileSection = [
         "Event",
         "Employee"
@@ -18,7 +20,7 @@ app.controller("CompanyController", function ($scope) {
         {name : "Kareem", title : "Worker Bee", company : "Dynamic"}
     ];
     
-    $scope.company = {
+    /*$scope.company = {
         name : "Dynamic",
         slogan : "Work your butt off",
         tower : "Forum 900",
@@ -27,8 +29,9 @@ app.controller("CompanyController", function ($scope) {
         reception : 1500,
         phone : "6124862416",
         email : "abc@dynamic.com",
-        accountID : 13579
-    };
+        accountID : 13579,
+        img : "Images/DynamicLogo.jpg"
+    };*/
     $scope.selectedEvent = null;
     $scope.selectedEmployee = null;
     
@@ -36,14 +39,20 @@ app.controller("CompanyController", function ($scope) {
         if(anEvent === $scope.selectedEvent) {
             $scope.selectedEvent = null;
         }
-        else $scope.selectedEvent = anEvent;
+        else {
+            $scope.selectedEvent = anEvent;
+            PageData.setEvent(anEvent);
+        }
         // Display employee info
     };
     $scope.employeeDisplayButton = function (employee) {
         if(employee === $scope.selectedEmployee) {
             $scope.selectedEmployee = null;
         }
-        else $scope.selectedEmployee = employee;
+        else {
+            $scope.selectedEmployee = employee;
+            PageData.setEmployee(employee);
+        }
         // Display employee info
     };
     $scope.editBar = function (edit) {
@@ -54,7 +63,7 @@ app.controller("CompanyController", function ($scope) {
     };
     $scope.displaySuite = function () {
         return $scope.company.suite.join(', ');
-    }
+    };
     
     $scope.token = {
         accountID : null,

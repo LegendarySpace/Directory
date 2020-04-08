@@ -5,13 +5,16 @@ var app = angular.module("Frame", ["ngAnimate", "ngRoute"]);
 app.config(function($routeProvider){
     $routeProvider
     .when("/", {
-        templateUrl : 'LandingPage.html'
+        templateUrl : 'LandingPage.html',
+        controller : 'LandingController'
     })
     .when("/tower", {
-        templateUrl : 'TowerPage.html'
+        templateUrl : 'TowerPage.html',
+        controller : 'TowerController'
     })
     .when("/company", {
-        templateUrl : "CompanyPage.html"
+        templateUrl : "CompanyPage.html",
+        controller : "CompanyController"
     })
     .otherwise({
         redirectTo : '/'
@@ -21,7 +24,7 @@ app.config(function($routeProvider){
 /* Filters */
 app.filter('filterByTower', function () {
     return function (x, selected) {
-        if (selected === null) { return x; }
+        if (selected === null || !angular.isDefined(selected) || x.length < 1) { return x; }
         var filtered = [];
         x.forEach(function (company) {
             if (company.tower === selected.name) { filtered.push(company); }
@@ -31,11 +34,21 @@ app.filter('filterByTower', function () {
 });
 app.filter('filterByCompany', function () {
     return function (x, selected) {
-        if (selected === null) { return x; }
+        if (selected === null || !angular.isDefined(selected) || x.length < 1) { return x; }
         var filtered = [];
         x.forEach(function (employee) {
             if (employee.company === selected.name) { filtered.push(employee); }
         });
+        return filtered;
+    };
+});
+app.filter('excludeHidden', function () {
+    return function (x) {
+        if (x.length < 1) { return x; }
+        var filtered = [];
+        for (key in x) {
+            if (key !== 'accountID' && key !== 'img') { filtered.push(x); }
+        }
         return filtered;
     };
 });
@@ -51,7 +64,9 @@ app.factory('PageData', function () {
     var savedCompany = {};
     var savedEmployee = {};
     var savedEvent = {};
-    //var userToken = { level : null, permissions : []};
+    var serverURL = 'https://script.google.com/macros/s/AKfycbydsK0d07yyGWJ4D7P49IEhAXkDxVwsz9cTSDfG_vA1aTcoyr8/exec';
+    var savedToken = {};
+    // var userToken = { level : null, permissions : []};
     function setTower (tower) {
         savedTower = tower;
     }
@@ -63,6 +78,9 @@ app.factory('PageData', function () {
     }
     function setEmployee (employee) {
         savedEmployee = employee;
+    }
+    function setToken (token) {
+        savedToken = token
     }
     function getTower () {
         return savedTower;
@@ -76,18 +94,36 @@ app.factory('PageData', function () {
     function getEmployee () {
         return savedEmployee;
     }
+    function getToken() {
+        return savedToken;
+    }
+    function loadP(page) {
+        // Contains GET request for pages
+        switch(page) {
+            case 'landing':
+                break;
+            case 'tower':
+                break;
+            case 'company':
+                break;
+        }
+    }
     return {
         setTower : setTower,
         setCompany : setCompany,
         setEvent : setEvent,
         setEmployee : setEmployee,
+        setToken : setToken,
         getTower : getTower,
         getCompany : getCompany,
         getEvent : getEvent,
-        getEmployee : getEmployee
+        getEmployee : getEmployee,
+        getToken : getToken,
+        getServer : serverURL,
+        loadP : loadP
     }
 });
 
 app.controller("FrameController", function ($scope) {
-    
+    // TODO GET to start a session
 });

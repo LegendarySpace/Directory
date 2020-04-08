@@ -1,53 +1,43 @@
-<script src="TowerJS.js"></script>
-        <!-- Directory Controller -->
-<div id="TowerBody" ng-controller="TowerController">
-    
-    <div id="towerSplash w3-container">
+
+<div id="TowerBody" class="content" style="background-image: url('{{tower.img}}');">
+    <div class="splash" style="position: relative;">
+        <!-- Splash Image -->
         <img ng-src="{{tower.img}}">
-        
-        <div ng-repeat="(x, y) in tower">
-            <div ng-switch="x">
+        <div class="text">
+            <div ng-repeat="(x, y) in tower" ng-hide="x === 'accountID' || x === 'img'">
+                <div ng-switch="x">
                 
-                <!-- Contains details about tower -->
-                <div ng-switch-when="name" id="towerName">Name: {{ tower.name }} <span ng-hide="token.accountID != tower.accountID" ng-click="editBar(x)">&#9998;</span>
-                    <div class="slideEdit" ng-hide="token.accountID != tower.accountID || slideEditBar != '{{ x }}'">
-                        <input ng-model="value" type="text"><btn ng-click="tower[x] = value" class="w3-btn">Submit</btn><btn class="w3-btn">Cancel</btn>
-                    </div>
-                </div>
-                
-                <!-- Skippables -->
-                <div ng-switch-when="accountID"></div>
-                <div ng-switch-when="img"></div>
-                
-                <div ng-switch-default>
-                    <div class="towerDetails"> {{ x | capitalize }}: {{ y }} <span ng-hide="token.accountID != tower.accountID" ng-click="editBar(x)">&#9998;</span>
+                    <!-- Contains details about tower -->
+                    <div ng-switch-when="name" class="title">Name: {{ tower.name }} <span ng-hide="token.accountID != tower.accountID" ng-click="editBar(x)">&#9998;</span>
                         <div class="slideEdit" ng-hide="token.accountID != tower.accountID || slideEditBar != '{{ x }}'">
                             <input ng-model="value" type="text"><btn ng-click="tower[x] = value" class="w3-btn">Submit</btn><btn class="w3-btn">Cancel</btn>
                         </div>
                     </div>
-                </div><br>
                 
+                    <!-- Skippables -->
+                    <div ng-switch-when="accountID" ng-hide="true"></div>
+                    <div ng-switch-when="img" ng-hide="true"></div>
+                
+                    <div ng-switch-default> {{ x | capitalize }}: {{ y }} <span ng-hide="token.accountID != tower.accountID" ng-click="editBar(x)">&#9998;</span>
+                        <div class="slideEdit" ng-hide="token.accountID != tower.accountID || slideEditBar != '{{ x }}'">
+                            <input ng-model="value" type="text"><btn ng-click="tower[x] = value" class="w3-btn">Submit</btn><btn class="w3-btn">Cancel</btn>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
-        <!-- Contains details about tower -->
-        <!--
-        <div id="towerName"> {{ tower.name }} </div><br>
-        <div class="towerdetails"> {{ tower.address }} </div><br>
-        <div class="towerdetails"> {{ tower.motto }} </div><br>
-        <div class="towerdetails"> {{ tower.about }} </div>
-        -->
     </div>
     
     <div ng-repeat="section in tileSection">
         <div class="sectionContainer">
             <!-- Contains tile group and detail bubble -->
-            <div class="w3-container tileGroup">
-                <!-- w3-container -->
+            <div class="tileGroup">
                 <div ng-switch="section">
                     <h3 class="title">{{section}}:</h3>
                     <div class="tileContainer">
                         
-                        <div ng-switch-when="Company" ng-repeat="item in companies">
+                        <div ng-switch-when="Company" ng-repeat="item in companies | filterByTower:tower">
                             <div ng-click="companyDisplayButton(item)" ng-show="item.name != ''" ng-selected="item === selectedCompany" class="{{ section | lowercase }}Tile displayTile">
                                 <h3>{{ item.name }}</h3>
                                 <h4>{{ item.suite }} </h4>
@@ -73,8 +63,8 @@
                     </div>
                 </div>
             </div>
-            <div class="w3-container detailBubble">
-                <!-- w3-container -->
+
+            <div class="detailBubble">
                 <div ng-show="selected{{section}} != null" class="bubble">
                     <div ng-switch="section">
                         
@@ -106,4 +96,3 @@
         </div>
     </div>
 </div>
-        <!-- End of Directory Controller -->

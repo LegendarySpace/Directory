@@ -1,14 +1,19 @@
-<!-- Splash Image -->
-<img src="Images/Tower.jpg">
-<!-- Universal Content -->
-<!-- load js-->
-<script src="LandingJS.js"></script>
-<div id="LandingBody" ng-controller="LandingController">
+
+<div id="LandingBody" class="content" style="background-image: url('Images/Tower.jpg')">
+
+    <div class="splash" style="position: relative; height: 600px;">
+        <!-- Splash Image -->
+        <img src="Images/Tower.jpg" sytle="display: none;">
+        <div class="text">
+            <div class="title">Welcome to Faux Directory</div>
+            <div>Surprisingly real for being so fake</div>
+        </div>
+    </div>
+
     <div ng-repeat="section in tileSection">
         <div class="sectionContainer">
             <!-- Contains tile group and detail bubble -->
-            <div class="tileGroup w3-container">
-                <!-- w3-container -->
+            <div class="tileGroup">
                 <div ng-switch="section">
                     <h3 class="title">{{section}}:</h3>
                     <div class="tileContainer">
@@ -31,14 +36,15 @@
                     </div>
                 </div>
             </div>
-            <div class="detailBubble w3-container">
-                <!-- w3-container -->
+
+            <div class="detailBubble">
                 <div ng-show="selected{{section}} != null" class="bubble">
                     <div ng-switch="section">
                         
                         <div ng-switch-when="Tower">
                             <h2> {{ selectedTower.name }} </h2>
                             <h3> {{ selectedTower.address }} </h3>
+                            <!-- $location.path() instead -->
                             <a href="#!/tower">Go to Tower</a>
                         </div>
                         
