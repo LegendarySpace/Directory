@@ -1,0 +1,125 @@
+
+@keyframes shine { 
+    0% { transform:translateX(-100%) translateY(-100%) rotate(-30deg); }
+    60% { transform:translateX(-100%) translateY(-100%) rotate(-30deg); }
+    100% { transform:translateX(100%) translateY(100%) rotate(-30deg); }
+}
+
+:root {
+    --tileHue: 200;
+    --tileSaturation: 14%;
+    --tileLuminosity: 75%;
+}
+
+#Directory {
+    width: 95%;
+    margin: auto;
+    background-color: azure;
+    align-items: center;
+    justify-content: center;
+}
+
+#selectedEvent {
+    transition: all linear 1s;
+    border-radius: 12px;
+    box-shadow: 1px 3px 7px 0px black;
+    width: 100%;
+}
+
+#selectedEvent.ng-hide {
+    display: none !important;
+    width: 0%;
+}
+
+.tileSection {
+    --tileCount: 5;
+    display: grid;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(calc(100%/var(--tileCount)), 1fr));
+}
+
+.displayTile {
+    transition: all linear .1s;
+    text-align: center;
+    position: relative;
+    top: 0;
+    z-index: 0;
+    overflow: hidden;
+    
+    --tileColor: hsl(var(--tileHue), var(--tileSaturation), var(--tileLuminosity));
+    --tileShine: hsl(var(--tileHue), var(--tileSaturation), calc(var(--tileLuminosity) + 15%));
+    --tileShadow: hsl(var(--tileHue), calc(var(--tileSaturation) * 0.7), calc(var(--tileLuminosity) * 0.6));
+
+    background: linear-gradient(to bottom, var(--tileColor), var(--tileShine), var(--tileColor));
+    box-shadow: 0px 5px 0px 0px var(--tileShadow);
+    border: 1px solid var(--tileShadow);
+    border-radius : 12px;
+    cursor: pointer;
+}
+
+.displayTile:hover:after {
+        content:'';
+        top:0;
+        transform:translateX(100%) rotate(180deg);
+        width:300%;
+        height:300%;
+        position: absolute;
+        z-index:1;
+        animation: shine 1.5s infinite ease-in;
+        background:
+            linear-gradient( to right, 
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.8) 50%,
+            rgba(128,186,232,0) 99%,
+            rgba(128,186,232,0) 100%);
+}
+
+.displayTile:active {
+    top: 3px;
+    box-shadow: 0px 2px 0px 0px var(--tileShadow);
+}
+
+.towerTile {
+    
+}
+
+.companyTile {
+    
+}
+
+.eventTile {
+    
+}
+
+[selected] {
+    --selectedTileColor: hsl(41, 55%, 49%);
+    --selectedTileShine: hsl(41, 65%, 63%);
+    --selectedTileShadow: hsl(41, calc(55% * 0.9), calc(49% * 0.77));
+    font-size: 20px;
+}
+
+[selected].displayTile {
+    background: linear-gradient(to bottom, var(--selectedTileColor), var(--selectedTileShine), var(--selectedTileColor));
+    color: white;
+    text-shadow: 1px 2px 0px black;
+    box-shadow: 0px 5px 0px 0px var(--selectedTileShadow);
+    border: 1px solid var(--selectedTileShadow);
+}
+
+[selected].displayTile:active {
+    top: 3px;
+    box-shadow: 0px 2px 0px 0px var(--selectedTileShadow);
+}
+
+[selected].towerTile {
+}
+
+[selected].companyTile {
+}
+
+.ng-hide:not(.ng-hide-animate):not(#selectedEvent) {
+    transition: all linear .01s;
+    display: inherit !important;
+    visibility: hidden;
+}

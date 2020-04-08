@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="LandingCSS.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.js"></script>
+        <script src="ServiceModule.js"></script>
+        <script src="LandingJS.js"></script>
+    </head>
+
+    <body>
+        <!-- Directory Controller -->
+        <div id="Directory" ng-app="DirectoryMain" ng-controller="DirectoryController">
+            <h1 id="WelcomeStatement">Welcome to the Faux Directory Service</h1>
+            <br><br>
+            <div ng-repeat="section in tileSection" class="{{ section }}Container">
+                <h3 class="sectionHeader">Please select a {{ section }}: </h3>
+                <!-- Start of Switch -->
+                <div ng-switch="section">
+                    
+                    <div ng-switch-when="Tower"  class="tileSection">
+                        <div ng-repeat="item in towers" ng-click="towerDisplayButton(item)" ng-show="item.name != ''" ng-selected="item == selected{{ section }}" class="{{ section | lowercase }}Tile displayTile">
+                            <span>{{ item.name }}</span>
+                            <br>
+                            <span>{{ item.address }}</span>
+                        </div>
+                    </div>
+                    
+                    <div ng-switch-when="Company" class="tileSection"> 
+                        <div ng-repeat="item in companies | filterByTower:selectedTower" ng-show="item.name != ''" ng-selected="item == selected{{ section }}" ng-click="companyDisplayButton(item)" class="{{ section | lowercase }}Tile displayTile">
+                            <span>{{ item.name }}</span><br><br>
+                            <span>{{ "Tower: " + item.tower + "     Suite: " + item.suite }}</span>
+                        </div>
+                    </div>
+                    
+                    
+                    <div ng-switch-when="Event">
+                        <div ng-hide="!selectedEvent" id="selectedEvent">
+                            <span>{{ selectedEvent.name }}</span><br>
+                            <span>Hosted by {{ selectedEvent.company }}</span><br>
+                            <span>Event held at {{ selectedEvent.tower }}</span><br>
+                            <span>{{ selectedEvent.details }}</span>
+                        </div><br>
+                        <div class="tileSection"> 
+                            <div ng-repeat="item in activities | filterByCompany:selectedCompany" ng-show="item.name != ''" ng-selected="item == selected{{ section }}" ng-click="employeeDisplayButton(item)" class="{{ section | lowercase }}Tile displayTile">
+                                <span>{{ item.name }}</span><br>
+                                <span>Host: {{ item.company }}</span>
+                                <span>Location: {{ item.tower }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <!-- End of Switch -->
+            </div>
+        </div>
+        <!-- End of Directory Controller -->
+    </body>
+
+</html>
