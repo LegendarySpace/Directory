@@ -1,8 +1,20 @@
 
-app.controller("CompanyController", function ($scope) {
+app.controller("TowerController", function ($scope, PageData) {
     $scope.tileSection = [
+        "Company",
         "Event",
         "Employee"
+    ];
+    $scope.companies = [
+        {name : "Dynamic", tower : "Forum 900", suite : "1560"},
+        {name : "Static", tower : "Forum 900", suite : "650"},
+        {name : "Foshay", tower : "Forum 900", suite : "1500"},
+        {name : "Not mine", tower : "AT&T", suite : "1360"},
+        {name : "Unconcerned", tower : "AT&T", suite : "1950"},
+        {name : "ATT", tower : "AT&T", suite : "350"},
+        {name : "Google", tower : "Forum 920", suite : "1890"},
+        {name : "Amazon", tower : "Forum 920", suite : "290"},
+        {name : "SpaceX", tower : "Forum 920", suite : "670"}
     ];
     $scope.activities = [
         {name : "ThermoDynamic", company : "Dynamic", tower : "Forum 900", details : "A BBQ hosted by Dynamic"}
@@ -18,20 +30,20 @@ app.controller("CompanyController", function ($scope) {
         {name : "Kareem", title : "Worker Bee", company : "Dynamic"}
     ];
     
-    $scope.company = {
-        name : "Dynamic",
-        slogan : "Work your butt off",
-        tower : "Forum 900",
-        address : "900 2nd Ave S.",
-        suite : [1500, 1645],
-        reception : 1500,
-        phone : "6124862416",
-        email : "abc@dynamic.com",
-        accountID : 13579
-    };
+    $scope.tower = {name : "Forum 900", address : "900 2nd Ave S", accountID : 849897, img : 'Images/Tower2.jpg'};
+    $scope.selectedCompany = null;
     $scope.selectedEvent = null;
     $scope.selectedEmployee = null;
     
+    $scope.companyDisplayButton = function (company) {
+        if(company === $scope.selectedCompany) {
+            $scope.selectedCompany = null;
+            PageData.setCompany = company;
+            // $window.location.url('../CompanyPage.html');
+        }
+        else $scope.selectedCompany = company;
+        // Open company page
+    };
     $scope.eventDisplayButton = function (anEvent) {
         if(anEvent === $scope.selectedEvent) {
             $scope.selectedEvent = null;
@@ -45,19 +57,5 @@ app.controller("CompanyController", function ($scope) {
         }
         else $scope.selectedEmployee = employee;
         // Display employee info
-    };
-    $scope.editBar = function (edit) {
-        if(edit === $scope.slideEditBar) {
-            $scope.slideEditBar = null;
-        }
-        else $scope.slideEditBar = edit;
-    };
-    $scope.displaySuite = function () {
-        return $scope.company.suite.join(', ');
-    }
-    
-    $scope.token = {
-        accountID : null,
-        permissions : []
     };
 });

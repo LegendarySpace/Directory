@@ -1,53 +1,58 @@
-<!-- Company Body -->
-<script src="CompanyJS.js"></script>
-<div class="CompanyBody" ng-controller="CompanyController">
+<script src="TowerJS.js"></script>
+        <!-- Directory Controller -->
+<div id="TowerBody" ng-controller="TowerController">
     
-    <!-- Convert to form -->
-    <div id="companySplash">
+    <div id="towerSplash w3-container">
+        <img ng-src="{{tower.img}}">
         
-        <div ng-repeat="(x, y) in company">
+        <div ng-repeat="(x, y) in tower">
             <div ng-switch="x">
                 
-                <!-- Contains details about company -->
-                <div ng-switch-when="name" id="companyName"> Name: {{ company.name }} <span ng-hide="token.accountID != company.accountID" ng-click="editBar(x)">&#9998;</span>
-                    <div class="slideEdit" ng-hide="token.accountID != company.accountID || slideEditBar != '{{ x }}'">
-                        <input ng-model="value" type="text">
-                        <btn ng-click="company.name = value" class="w3-btn">Submit</btn><btn class="w3-btn">Cancel</btn>
+                <!-- Contains details about tower -->
+                <div ng-switch-when="name" id="towerName">Name: {{ tower.name }} <span ng-hide="token.accountID != tower.accountID" ng-click="editBar(x)">&#9998;</span>
+                    <div class="slideEdit" ng-hide="token.accountID != tower.accountID || slideEditBar != '{{ x }}'">
+                        <input ng-model="value" type="text"><btn ng-click="tower[x] = value" class="w3-btn">Submit</btn><btn class="w3-btn">Cancel</btn>
+                    </div>
+                </div>
+                
+                <!-- Skippables -->
+                <div ng-switch-when="accountID"></div>
+                <div ng-switch-when="img"></div>
+                
+                <div ng-switch-default>
+                    <div class="towerDetails"> {{ x | capitalize }}: {{ y }} <span ng-hide="token.accountID != tower.accountID" ng-click="editBar(x)">&#9998;</span>
+                        <div class="slideEdit" ng-hide="token.accountID != tower.accountID || slideEditBar != '{{ x }}'">
+                            <input ng-model="value" type="text"><btn ng-click="tower[x] = value" class="w3-btn">Submit</btn><btn class="w3-btn">Cancel</btn>
+                        </div>
                     </div>
                 </div><br>
                 
-                <div ng-switch-when="suite"><br>
-                    <div class="companyDetails"> Suite: {{ displaySuite() }} <span ng-hide="token.accountID != company.accountID" ng-click="editBar(x)">&#9998;</span>
-                        <div class="slideEdit" ng-hide="token.accountID != company.accountID || slideEditBar != '{{ x }}'">
-                            <input ng-model="value" type="text">
-                            <btn ng-click="company.suite.push(value)" class="w3-btn">Submit</btn><btn>Cancel</btn>
-                        </div>
-                    </div>
-                </div>
-                
-                <div ng-switch-when="accountID"></div>
-                
-                <div ng-switch-default>
-                    <div class="companyDetails"> {{ x | capitalize }}: {{ y }} <span ng-hide="token.accountID != company.accountID" ng-click="editBar(x)">&#9998;</span>
-                        <div class="slideEdit" ng-hide="token.accountID != company.accountID || slideEditBar != '{{ x }}'">
-                            <input ng-model="value" type="text">
-                            <btn ng-click="company[x] = value">Submit</btn><btn>Cancel</btn>
-                        </div>
-                    </div>
-                </div>
-                
             </div>
         </div>
-        
+        <!-- Contains details about tower -->
+        <!--
+        <div id="towerName"> {{ tower.name }} </div><br>
+        <div class="towerdetails"> {{ tower.address }} </div><br>
+        <div class="towerdetails"> {{ tower.motto }} </div><br>
+        <div class="towerdetails"> {{ tower.about }} </div>
+        -->
     </div>
     
     <div ng-repeat="section in tileSection">
         <div class="sectionContainer">
             <!-- Contains tile group and detail bubble -->
-            <div class="tileGroup">
+            <div class="w3-container tileGroup">
+                <!-- w3-container -->
                 <div ng-switch="section">
-                    <!-- w3-container -->
-                    <div class="w3-container tileContainer">
+                    <h3 class="title">{{section}}:</h3>
+                    <div class="tileContainer">
+                        
+                        <div ng-switch-when="Company" ng-repeat="item in companies">
+                            <div ng-click="companyDisplayButton(item)" ng-show="item.name != ''" ng-selected="item === selectedCompany" class="{{ section | lowercase }}Tile displayTile">
+                                <h3>{{ item.name }}</h3>
+                                <h4>{{ item.suite }} </h4>
+                            </div>
+                        </div>
                         
                         <div ng-switch-when="Event" ng-repeat="item in activities | filterByCompany:selectedCompany">
                             <div ng-click="eventDisplayButton(item)" ng-show="item.name != ''" ng-selected="item === selectedEvent" class="{{ section | lowercase }}Tile displayTile">
@@ -68,10 +73,17 @@
                     </div>
                 </div>
             </div>
-            <div class="detailBubble">
+            <div class="w3-container detailBubble">
                 <!-- w3-container -->
-                <div ng-show="selected{{section}} != null" class="w3-container bubble">
+                <div ng-show="selected{{section}} != null" class="bubble">
                     <div ng-switch="section">
+                        
+                        <div ng-switch-when="Company">
+                            <h2> {{ selectedCompany.name }} </h2>
+                            <h3> {{ selectedCompany.tower }} </h3>
+                            <h3> {{ selectedCompany.suite }} </h3>
+                            <a href="#!/company">Go to Company</a>
+                        </div>
                         
                         <div ng-switch-when="Event">
                             <h1> {{ selectedEvent.name }} </h1>
@@ -94,4 +106,4 @@
         </div>
     </div>
 </div>
-<!-- End of Body -->
+        <!-- End of Directory Controller -->

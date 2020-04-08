@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="DirectoryCSS.css">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+        
+        <script src="ServiceModule.js"></script>
+        <script src="LandingJS.js"></script>
+        <script src="TowerJS.js"></script>
+        <script src="CompanyJS.js"></script>
+    </head>
+
+    <body id="Frame" ng-app="Frame" ng-controller="FrameController">
+        <!-- Header Section -->
+        <div id="Headerbar">
+            <!-- contains centered logo and right aligned sign in button/user -->
+        </div>
+        <!-- End of Header Section -->
+        <!-- Body Section -->
+        <div ng-view>
+            
+            
+        </div>
+        <!-- End of Body Section -->
+        <!-- Sidebar Section -->
+        <div id="Sidebar">
+            <div id="Weather">
+                <!-- Weather -->
+            </div>
+            <div id="Navigation">
+                <!-- Navigation -->
+            </div>
+        </div>
+        <!-- End of Footer Section -->
+    </body>
+
+</html>

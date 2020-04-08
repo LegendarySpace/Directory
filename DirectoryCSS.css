@@ -11,35 +11,58 @@
     --tileLuminosity: 75%;
 }
 
-#Directory {
-    width: 95%;
-    margin: auto;
-    background-color: azure;
-    align-items: center;
-    justify-content: center;
+body {
+    background-color: lightgray;
 }
 
-#selectedEvent {
-    transition: all linear 1s;
-    border-radius: 12px;
-    box-shadow: 1px 3px 7px 0px black;
+img {
     width: 100%;
 }
 
-#selectedEvent.ng-hide {
-    display: none !important;
-    width: 0%;
+#Directory {
+    width: 95%%;
+    margin: auto;
+    background-color: azure;
 }
 
-.tileSection {
-    --tileCount: 5;
+#EmployeeDisplay {
+    width: 100%;
+    margin: auto;
+    background-color: antiquewhite;
+}
+
+#EmployeeContainer {
+    width: 85%;
+    margin: auto;
+    background-color: darkorange;
+}
+
+
+
+
+
+.sectionContainer {
+    padding: 0em 1em 2em 0em;
+    background: azure;
+    margin: 1em;
+    border-radius: 10px;
+}
+
+.tileGroup {
+    
+}
+
+h3.title {
+    margin: 0;
+}
+
+.tileContainer {
     display: grid;
-    grid-gap: 10px;
-    grid-template-columns: repeat(auto-fit, minmax(calc(100%/var(--tileCount)), 1fr));
+    grid-gap: 1em;
+    grid-template-columns: repeat(4, minmax(100px, 1fr));
 }
 
 .displayTile {
-    max-width: 25%;
     transition: all linear .1s;
     text-align: center;
     position: relative;
@@ -80,18 +103,6 @@
     box-shadow: 0px 2px 0px 0px var(--tileShadow);
 }
 
-.towerTile {
-    
-}
-
-.companyTile {
-    
-}
-
-.eventTile {
-    
-}
-
 [selected] {
     --selectedTileColor: hsl(41, 55%, 49%);
     --selectedTileShine: hsl(41, 65%, 63%);
@@ -112,14 +123,23 @@
     box-shadow: 0px 2px 0px 0px var(--selectedTileShadow);
 }
 
-[selected].towerTile {
+.slideEdit {
+    
 }
 
-[selected].companyTile {
+.bubble {
+    margin: auto;
+    text-align: center;
 }
 
-.ng-hide:not(.ng-hide-animate):not(#selectedEvent) {
-    transition: all linear .01s;
-    display: inherit !important;
-    visibility: hidden;
+.bubble > h1 {
+    
+}
+
+.bubble > h2 {
+    
+}
+
+.bubble > h3 {
+    
 }

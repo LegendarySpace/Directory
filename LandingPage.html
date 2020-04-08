@@ -1,60 +1,62 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="LandingCSS.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.js"></script>
-        <script src="ServiceModule.js"></script>
-        <script src="LandingJS.js"></script>
-    </head>
-
-    <body>
-        <!-- Directory Controller -->
-        <div id="Directory" ng-app="DirectoryMain" ng-controller="DirectoryController">
-            <h1 id="WelcomeStatement">Welcome to the Faux Directory Service</h1>
-            <br><br>
-            <div ng-repeat="section in tileSection" class="{{ section }}Container">
-                <h3 class="sectionHeader">Please select a {{ section }}: </h3>
-                <!-- Start of Switch -->
+<!-- Splash Image -->
+<img src="Images/Tower.jpg">
+<!-- Universal Content -->
+<!-- load js-->
+<script src="LandingJS.js"></script>
+<div id="LandingBody" ng-controller="LandingController">
+    <div ng-repeat="section in tileSection">
+        <div class="sectionContainer">
+            <!-- Contains tile group and detail bubble -->
+            <div class="tileGroup w3-container">
+                <!-- w3-container -->
                 <div ng-switch="section">
-                    
-                    <div ng-switch-when="Tower"  class="tileSection">
-                        <div ng-repeat="item in towers" ng-click="towerDisplayButton(item)" ng-show="item.name != ''" ng-selected="item == selected{{ section }}" class="{{ section | lowercase }}Tile displayTile">
-                            <span>{{ item.name }}</span>
-                            <br>
-                            <span>{{ item.address }}</span>
-                        </div>
-                    </div>
-                    
-                    <div ng-switch-when="Company" class="tileSection"> 
-                        <div ng-repeat="item in companies | filterByTower:selectedTower" ng-show="item.name != ''" ng-selected="item == selected{{ section }}" ng-click="companyDisplayButton(item)" class="{{ section | lowercase }}Tile displayTile">
-                            <span>{{ item.name }}</span><br><br>
-                            <span>{{ "Tower: " + item.tower + "     Suite: " + item.suite }}</span>
-                        </div>
-                    </div>
-                    
-                    
-                    <div ng-switch-when="Event">
-                        <div ng-hide="!selectedEvent" id="selectedEvent">
-                            <span>{{ selectedEvent.name }}</span><br>
-                            <span>Hosted by {{ selectedEvent.company }}</span><br>
-                            <span>Event held at {{ selectedEvent.tower }}</span><br>
-                            <span>{{ selectedEvent.details }}</span>
-                        </div><br>
-                        <div class="tileSection"> 
-                            <div ng-repeat="item in activities | filterByCompany:selectedCompany" ng-show="item.name != ''" ng-selected="item == selected{{ section }}" ng-click="employeeDisplayButton(item)" class="{{ section | lowercase }}Tile displayTile">
-                                <span>{{ item.name }}</span><br>
-                                <span>Host: {{ item.company }}</span>
-                                <span>Location: {{ item.tower }}</span>
+                    <h3 class="title">{{section}}:</h3>
+                    <div class="tileContainer">
+                        
+                        <div ng-switch-when="Tower" ng-repeat="item in towers">
+                            <div ng-click="towerDisplayButton(item)" ng-show="item.name != ''" ng-selected="item === selectedTower" class="{{ section | lowercase }}Tile displayTile">
+                                <h3>{{ item.name }}</h3>
+                                <h4>{{ item.address }} </h4>
                             </div>
                         </div>
+                        
+                        <div ng-switch-when="Event" ng-repeat="item in activities | filterByTower:selectedTower">
+                            <div ng-click="eventDisplayButton(item)" ng-show="item.name != ''" ng-selected="item === selectedEvent" class="{{ section | lowercase }}Tile displayTile">
+                                <h3>{{ item.name }} </h3>
+                                <h4>Host: {{ item.company }} </h4>
+                                <h4>Locale: {{ item.tower }} </h4>
+                            </div>
+                        </div>
+                        
                     </div>
-                    
                 </div>
-                <!-- End of Switch -->
+            </div>
+            <div class="detailBubble w3-container">
+                <!-- w3-container -->
+                <div ng-show="selected{{section}} != null" class="bubble">
+                    <div ng-switch="section">
+                        
+                        <div ng-switch-when="Tower">
+                            <h2> {{ selectedTower.name }} </h2>
+                            <h3> {{ selectedTower.address }} </h3>
+                            <a href="#!/tower">Go to Tower</a>
+                        </div>
+                        
+                        <div ng-switch-when="Event">
+                            <h1> {{ selectedEvent.name }} </h1>
+                            <h3> {{ selectedEvent.company }} </h3>
+                            <h3> {{ selectedEvent.tower }} </h3>
+                            <h3> {{ selectedEvent.detail }} </h3>
+                            <a href="#!/company">Go to Event</a>
+                        </div>
+                        
+                        <div ng-switch-default>
+                            <h2> Selected Item </h2>
+                        </div>
+                        
+                    </div>
+                </div>
             </div>
         </div>
-        <!-- End of Directory Controller -->
-    </body>
-
-</html>
+    </div>
+</div>
