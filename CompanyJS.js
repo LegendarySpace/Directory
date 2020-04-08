@@ -63,7 +63,7 @@ app.controller("CompanyController", function ($scope, PageData) {
     };
     $scope.displaySuite = function () {
         return $scope.company.suite.join(', ');
-    };
+    }
     
     $scope.token = {
         accountID : null,

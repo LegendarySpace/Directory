@@ -1,68 +1,28 @@
 
 <div id="LandingBody" class="content" style="background-image: url('Images/Tower.jpg')">
-
-    <div class="splash" style="position: relative; height: 600px;">
-        <!-- Splash Image -->
-        <img src="Images/Tower.jpg" sytle="display: none;">
-        <div class="text">
-            <div class="title">Welcome to Faux Directory</div>
-            <div>Surprisingly real for being so fake</div>
+    <div class="splash">Welcome message</div>
+    <div id="Display" ng-hide="selection.length === 0">
+        <div id="Selected" class="tileContainer">
+            <div ng-repeat="tile in selection" class="displayTile" ng-selected="currentSection === tile.section" ng-click="selectedClick(tile)">
+                <h3>{{tile.section}}</h3>
+                <h4 ng-hide="tile.choice === ''">{{tile.choice}}</h4>
+            </div>
         </div>
+        <div class="tileGroup tileContainer" ng-hide="sDisplay !== 'Tiles'">
+            <div ng-repeat="tile in tiles" class="displayTile" ng-selected="currentChoice.name === tile.name" ng-click="chooseTile(tile)">
+                <h3>{{tile.name}}</h3>
+                <h4>{{tile.aux}}</h4>
+            </div>
+        </div>
+        <div class="bubble" ng-hide="sDisplay !== 'Bubble'">
+            <div ng-repeat="(x,y) in currentChoice">{{x}}: {{y}}</div>
+            <div><span class="link" ng-click="linkPage(currentSection,currentChoice.name)">Go To {{currentSection}} Page</span></div>
+        </div>
+
     </div>
-
-    <div ng-repeat="section in tileSection">
-        <div class="sectionContainer">
-            <!-- Contains tile group and detail bubble -->
-            <div class="tileGroup">
-                <div ng-switch="section">
-                    <h3 class="title">{{section}}:</h3>
-                    <div class="tileContainer">
-                        
-                        <div ng-switch-when="Tower" ng-repeat="item in towers">
-                            <div ng-click="towerDisplayButton(item)" ng-show="item.name != ''" ng-selected="item === selectedTower" class="{{ section | lowercase }}Tile displayTile">
-                                <h3>{{ item.name }}</h3>
-                                <h4>{{ item.address }} </h4>
-                            </div>
-                        </div>
-                        
-                        <div ng-switch-when="Event" ng-repeat="item in activities | filterByTower:selectedTower">
-                            <div ng-click="eventDisplayButton(item)" ng-show="item.name != ''" ng-selected="item === selectedEvent" class="{{ section | lowercase }}Tile displayTile">
-                                <h3>{{ item.name }} </h3>
-                                <h4>Host: {{ item.company }} </h4>
-                                <h4>Locale: {{ item.tower }} </h4>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-
-            <div class="detailBubble">
-                <div ng-show="selected{{section}} != null" class="bubble">
-                    <div ng-switch="section">
-                        
-                        <div ng-switch-when="Tower">
-                            <h2> {{ selectedTower.name }} </h2>
-                            <h3> {{ selectedTower.address }} </h3>
-                            <!-- $location.path() instead -->
-                            <a href="#!/tower">Go to Tower</a>
-                        </div>
-                        
-                        <div ng-switch-when="Event">
-                            <h1> {{ selectedEvent.name }} </h1>
-                            <h3> {{ selectedEvent.company }} </h3>
-                            <h3> {{ selectedEvent.tower }} </h3>
-                            <h3> {{ selectedEvent.detail }} </h3>
-                            <a href="#!/company">Go to Event</a>
-                        </div>
-                        
-                        <div ng-switch-default>
-                            <h2> Selected Item </h2>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
+    <div id="Footer" class="tileContainer">
+        <div ng-repeat="section in sections" class="displayTile" ng-hide="currentSection === section" ng-click="footerClick(section)">
+            <h2>{{section}}</h2>
         </div>
     </div>
 </div>

@@ -64,7 +64,7 @@ app.factory('PageData', function () {
     var savedCompany = {};
     var savedEmployee = {};
     var savedEvent = {};
-    var serverURL = 'https://script.google.com/macros/s/AKfycbydsK0d07yyGWJ4D7P49IEhAXkDxVwsz9cTSDfG_vA1aTcoyr8/exec';
+    var serverURL = 'http://fauxdirectory.rf.gd/#!/Responder.php';
     var savedToken = {};
     // var userToken = { level : null, permissions : []};
     function setTower (tower) {
@@ -97,17 +97,6 @@ app.factory('PageData', function () {
     function getToken() {
         return savedToken;
     }
-    function loadP(page) {
-        // Contains GET request for pages
-        switch(page) {
-            case 'landing':
-                break;
-            case 'tower':
-                break;
-            case 'company':
-                break;
-        }
-    }
     return {
         setTower : setTower,
         setCompany : setCompany,
@@ -119,11 +108,10 @@ app.factory('PageData', function () {
         getEvent : getEvent,
         getEmployee : getEmployee,
         getToken : getToken,
-        getServer : serverURL,
-        loadP : loadP
+        getServer : serverURL
     }
 });
 
 app.controller("FrameController", function ($scope) {
-    // TODO GET to start a session
+    
 });
