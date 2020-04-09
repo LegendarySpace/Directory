@@ -1,10 +1,15 @@
 <?php
     session_start();
+    // when logged in store userID in session variable
 
     $servername = "sql306.byetcluster.com";
     $username = "epiz_25453908";
     $password = "A80F9pKPdGx";
     $dbname = "epiz_25453908_Directory";
+    function sendError() {
+        http_response_code(404);
+        echo 'Item not found';
+    }
 
     if($_SERVER["REQUEST_METHOD"] == "GET") {
         $purpose = $_GET["purpose"];
@@ -37,7 +42,7 @@
                     $result = $conn->query($sqltower);
                     if($result->num_rows > 0) {
                         // Only retrieve first item
-                        $row = $result->fetch_assoc());
+                        $row = $result->fetch_assoc();
                         $admin = $_SESSION['UserID'] == $row['AdminID'];
                         $tower = array("name"=>$row["Name"], "address"=>$row["Location"],"admin"=>true); // switch to $admin
                     } else { echo "Tower not found";}
@@ -54,8 +59,67 @@
                     echo json_encode($returnValue);
                     break;
 
+                case 'splash':
+                    // Set universal variables
+                    $page = $_GET['page'];
+                    $name = $_GET['name'];
+                    $aux = $_GET['aux'];
+                    $splashArray = $sectionsArray = $admin = '';
+                    $admin = false;
+                    // if logged in retrieve id
+                    switch($page) {
+                        case 'landing':
+                            // Accepts no input
+                            // get adminID
+                            // $admin = $_SESSION['userID'] === adminID
+                            // initialize splash message
+                            $splashArray = array('message'=>'Welcome to Faux Directory', 'sub'=>'Surprisingly real');
+                            // add sections
+                            $sectionsArray = array('Tower', 'Event');
+                            break;
+                        case 'tower':
+                            $sql = "SELECT * FROM Towers WHERE Name=\'{$name}\' AND Location=\'{$aux}\'";
+                            $result = $conn->query($sql);
+                            if($result->num_rows > 0) {
+                                // Only grab the first item, assign items to $splashArray
+                                $row = $result->fetch_assoc();
+	                            // $admin = $_SESSION['userID'] === $row['AdminID'];
+                                $splashArray = array('name'=>$name, 'location'=>$aux, 'manage'=>$row['ManagementCompany'],
+                                    'phone'=>$row['ManagementContact'], 'email'=>$row['ManagementContactEmail'],
+                                    'details'=>$row['Details'], 'img'=>$row['ImageURL']);
+                            }
+                            $sectionsArray = array('Company', 'Event', 'Employee');
+                            break;
+                        case 'company':
+	                        $sql = "SELECT * FROM Companies WHERE Name=\'{$name}\' AND Reception=\'{$aux}\'";
+	                        $result = $conn->query($sql);
+	                        if($result->num_rows > 0) {
+	                            // Only grab the first item, assign items to $splashArray
+	                            $row = $result->fetch_assoc();
+	                            // $admin = $_SESSION['userID'] === $row['AdminID'];
+	                            $splashArray = array('name'=>$name, 'suite'=>$row['Suite'], 'reception'=>$aux,
+	                                'phone'=>$row['ContactNumber'], 'email'=>$row['ContactEmail'], 'slogan'=>$row['Slogan'],
+	                                'details'=>$row['Details'], 'img'=>$row['ImageURL']);
+	                        }
+	                        $sectionsArray = array('Event', 'Employee');
+                            break;
+                        default:
+                            sendError();
+                    }
+                    echo json_encode(array('splash'=>$splashArray, 'sections'=>$sectionsArray, 'admin'=>$admin));
+                    break;
+
+                case 'tiles':
+                    // switch through section
+                    break;
+
+                case 'bubble':
+                    // switch through section
+                    break;
+
                 default:
                     // Send back failed request
+                    sendError();
 
             }
             $conn->close();

@@ -17,6 +17,7 @@ app.controller("LandingController", function($scope, $http, $location, PageData)
     $scope.sDisplay = null; // DisplayArea [Null, Tiles, Bubble]
 
     $scope.loadTiles = function(section) {
+        // Retrieve tile data
         $scope.tiles = [];
         $http.jsonp(PageData.getServer + 'purpose=landingBtn&section=' + section)
             .then(function (response) {
@@ -64,7 +65,7 @@ app.controller("LandingController", function($scope, $http, $location, PageData)
             $scope.selection[index].choice = tile.name;
         }
 
-        // Generate URL
+        // Generate URL to retrieve bubble data
         var purpose = "purpose=LandingBubble";
         var section = "section=" + $scope.selection[index].section;
         var name = "name=" + tile.name;
