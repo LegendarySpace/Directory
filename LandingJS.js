@@ -1,5 +1,5 @@
 
-app.controller("LandingController", function($scope, $http, $location, PageData) {
+app.controller("LandingController", function($scope, $http, $location, $sce, PageData) {
     $http.jsonp(PageData.getServer + '?purpose=landing')
         .then(function (response) {
             var data = response.data;
