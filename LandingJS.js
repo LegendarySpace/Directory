@@ -1,6 +1,6 @@
 
 app.controller("LandingController", function($scope, $http, $location, $sce, PageData) {
-    $http.jsonp(PageData.getServer + '?purpose=landing')
+    $http.jsonp(PageData.getServer + '?purpose=splash&page=landing')
         .then(function (response) {
             var data = response.data;
             $scope.sections = data.sections;
@@ -19,7 +19,7 @@ app.controller("LandingController", function($scope, $http, $location, $sce, Pag
     $scope.loadTiles = function(section) {
         // Retrieve tile data
         $scope.tiles = [];
-        $http.jsonp(PageData.getServer + 'purpose=landingBtn&section=' + section)
+        $http.jsonp(PageData.getServer + 'purpose=tiles&section=' + section)
             .then(function (response) {
                 $scope.tiles = response.data;
             }, function (response) {
@@ -66,7 +66,7 @@ app.controller("LandingController", function($scope, $http, $location, $sce, Pag
         }
 
         // Generate URL to retrieve bubble data
-        var purpose = "purpose=LandingBubble";
+        var purpose = "purpose=bubble";
         var section = "section=" + $scope.selection[index].section;
         var name = "name=" + tile.name;
         var aux = "aux=" + tile.aux;

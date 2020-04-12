@@ -39,7 +39,7 @@
         return $id;
     }
     function hasID($obj) {
-        if ($obj['id'] === null) return false;
+        if (empty($obj) || $obj['id'] === null) return false;
         else return true;
     }
     function getID($obj, $connect, $table) {
@@ -47,6 +47,10 @@
         // Convert aux to table column based on what table is used
         $auxArray = array('Towers'=>'Location','Companies'=>'Reception','Events'=>'Host','Employees'=>'Title','Users'=>'Password');
         $sql = "SELECT AccountID FROM {$table} WHERE Name='{$obj['name']}' AND {$auxArray[$table]}='{$obj['aux']}'";
+        if($table === 'Employees') {
+            $name = str_split("/[\s,]+/", $obj['name']);
+            $sql = "SELECT AccountID FROM {$table} WHERE FirstName='{$name[0]}' AND LastName='{$name[1]}' AND {$auxArray[$table]}='{$obj['aux']}'";
+        }
         $result = $connect->query($sql);
         if($result->num_rows > 0) {
             // TODO Update to do deeper search, currently returns the first one it finds
@@ -56,6 +60,17 @@
         }
         return false;
     }
+
+    /**
+     *  GET Structure
+     *  three cases get is called
+     *      get splash data
+     *          input must contain page and may contain name, aux
+     *      get tile data
+     *          input must contain section and may contain tname, taux && cname, caux
+     *      get bubble data
+     *          input must contain section, name, aux and may contain tname, taux && cname, caux
+    **/
 
     if($_SERVER["REQUEST_METHOD"] == "GET") {
         $purpose = $_GET["purpose"];
@@ -123,11 +138,12 @@
                     // Set universal variables
                     $section = $_GET['section'];
                     $tileArray = array();
+                    $additional = null;
+                    // Get IDs if set, can be null
                     $tower = (!empty($_GET['tname']))?array('name'=>$_GET['tname'], 'aux'=>$_GET['taux'], 'id'=>null):null;
                     if(!empty($tower)) getID($tower, $conn, 'Towers');
                     $company = (!empty($_GET['cname']))?array('name'=>$_GET['cname'], 'aux'=>$_GET['caux'], 'id'=>null):null;
                     if(!empty($company)) getID($company, $conn, 'Companies');
-                    $additional = null;
 
                     // switch through section
                     switch ($section) {
@@ -185,43 +201,114 @@
                                 }
                             }
 
-                            // employees should be public to view unless admin
-                            $sql = "SELECT Name, Title FROM Employees WHERE Public=true";
+                            // TODO Employees needs to be public to view unless by admin
+                            $sql = "SELECT FirstName, LastName, Title FROM Employees WHERE Public=true";
                             if(!empty($additional)) $sql = "{$sql} AND ({$additional})";
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
-                                    array_push($tileArray, array('name'=>$row['Name'], 'aux'=>['Title']));
+                                    array_push($tileArray, array('name'=>"{$row['FirstName']} {$row['LastName']}", 'aux'=>['Title']));
                                 }
                             }
                             break;
                         default:
-                            echo sendError();
+                            // echo sendError(); happens at end
                     }
                     // Attempt to return response
-                    echo sendData(array('tiles'=>$tileArray));
+                    if (empty($tileArray)) echo sendError();
+                    else echo sendData(array('tiles'=>$tileArray));
                     break;
 
                 case 'bubble':
+                    // TODO If $_GET['name'] or $_GET['aux'] is empty fail
                     // Set universal variables
                     $section = $_GET['section'];
-                    $bubbleArray = '';
+                    $tileArray = array();
+                    $additional = $bubbleArray = null;
                     $selObj = array('name'=>$_GET['name'],'aux'=>$_GET['aux'], 'id'=>null);
+                    // Get IDs if set
+                    $tower = (!empty($_GET['tname']))?array('name'=>$_GET['tname'], 'aux'=>$_GET['taux'], 'id'=>null):null;
+                    if(!empty($tower)) getID($tower, $conn, 'Towers');
+                    $company = (!empty($_GET['cname']))?array('name'=>$_GET['cname'], 'aux'=>$_GET['caux'], 'id'=>null):null;
+                    if(!empty($company)) getID($company, $conn, 'Companies');
 
                     // switch through section
                     switch ($section) {
                         case 'Tower':
+                            // Get ObjID and use it to gather details
+                            getID($selObj, $conn, 'Towers');
+                            $sql = "SELECT * FROM Towers WHERE Name='{$selObj['name']}' AND Location='{$selObj['aux']}' AND AccountID='{$selObj['id']}'";
+                            //if (!empty($additional)) $sql = "{$sql} WHERE {$additional}";
+                            $result = $conn->query($sql);
+                            if($result->num_rows > 0) {
+                                $row= $result->fetch_assoc();
+                                $bubbleArray = array('Name'=>$row['Name'],'Location'=>$row['Location'],
+                                    'Management'=>$row['ManagementCompany'],'Contact Number'=>$row['ManagementContact'],
+                                    'Contact Email'=>$row['ManagementContactEmail'], 'Details'=>$row['Details']);
+                            }
                             break;
                         case 'Company':
+                            // if there's tower data use it to get company
+                            if(hasID($tower)) $additional = "TowerID='{$tower['id']}'";
+                            else getID($selObj, $conn, 'Companies');
+
+                            $sql = "SELECT * FROM Companies WHERE Name='{$selObj['name']}' AND Reception='{$selObj['aux']}' AND";
+                            $sql = (hasID($tower))? "{$sql} {$additional}": "{$sql} AccountID='{$selObj['id']}'";
+                            $result = $conn->query($sql);
+                            if($result->num_rows > 0) {
+                                $row = $result->fetch_assoc();
+                                $bubbleArray = array('Name'=>$row['Name'], 'Slogan'=>$row['Slogan'], 'Suites'=>$row['Suite'],
+                                    'Reception'=>$row['Reception'], 'Phone'=>$row['ContactNumber'],
+                                    'Email'=>$row['ContactEmail'], 'Details'=>$row['Details']);
+                            }
                             break;
                         case 'Event':
+                            // if tower/company data exist use it to get event
+                            if(hasID($tower)) $additional = "TowerID='{$tower['id']}'";
+                            if(hasID($company)) $additional = (empty($additional))? "CompanyID='{$company['id']}'": "{$additional} AND CompanyID='{$company['id']}'";
+                            if(empty($additional)) getID($selObj, $conn, 'Events');
+
+                            $sql = "SELECT * FROM Events WHERE Name='{$selObj['name']}' AND Host='{$selObj['aux']}' AND";
+                            $sql = (empty($additional))? "{$sql} AccountID='{$selObj['id']}'": "{$sql} {$additional}";
+                            $result = $conn->query($sql);
+                            if($result->num_rows > 0) {
+                                $row = $result->fetch_assoc();
+                                $bubbleArray = array('Name'=>$row['Name'], 'Slogan'=>$row['Slogan'], 'Host'=>$row['Host'],
+                                    'Location'=>$row['Location'], 'Details'=>$row['Details']);
+                            }
                             break;
                         case 'Employee':
+                            // if tower/company data exist use it to get employee
+                            if(hasID($company)) $additional = "CompanyID='{$company['id']}'";
+                            elseif (hasID($tower)) {
+                                // For loop through companies adding them to additional
+                                $query = "SELECT AccountID FROM Companies WHERE TowerID='{$tower['id']}'";
+                                $res = $conn->query($query);
+                                if($res->num_rows > 0) {
+                                    // Set additional to contain all companies
+                                    while ($row = $res->fetch_assoc()) {
+                                        $additional = (empty($additional))? "CompanyID='{$row['AccountID']}'": "{$additional} OR CompanyID='{$row['AccountID']}'";
+                                    }
+                                }
+                            }
+                            if(empty($additional)) getID($selObj, $conn, 'Employees');
+
+                            $sql = "SELECT * FROM Employees WHERE Name='{$selObj['name']}' AND Title='{$selObj['aux']}' AND";
+                            $sql = (empty($additional))? "{$sql} AccountID='{$selObj['id']}'": "{$sql} {$additional}";
+                            $result = $conn->query($sql);
+                            if($result->num_rows > 0) {
+                                $row = $result->fetch_assoc();
+                                if($row['Public']) {
+                                    $bubbleArray = array('First Name' => $row['FirstName'], 'Last Name' => $row['LastName'],
+                                        'Title' => $row['Title'], 'Phone' => $row['Phone'], 'Email' => $row['Email']);
+                                }
+                            }
                             break;
                         default:
                     }
                     // Attempt to return response
-                    echo sendData(array('bubble'=>$bubbleArray));
+                    if (empty($bubbleArray)) echo sendError();
+                    else echo sendData(array('bubble'=>$bubbleArray));
                     break;
 
                 default:
@@ -234,6 +321,10 @@
         }
     }
 
+    /**
+     *  POST Structure
+     *  cases post is called
+    **/
 
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         $purpose = $_POST["purpose"];
