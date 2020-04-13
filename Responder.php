@@ -114,6 +114,7 @@
                             $sectionsArray = array('Company', 'Event', 'Employee');
                             break;
                         case 'company':
+                            // May change aux to towerName
 	                        $sql = "SELECT * FROM Companies WHERE Name='{$name}' AND Reception='{$aux}'";
 	                        $result = $conn->query($sql);
 	                        if($result->num_rows > 0) {
@@ -147,7 +148,7 @@
 
                     // switch through section
                     switch ($section) {
-                        case 'Tower':
+                        case 'tower':
                             $sql = 'SELECT Name, Location FROM Towers';
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
@@ -156,7 +157,7 @@
                                 }
                             }
                             break;
-                        case 'Company':
+                        case 'company':
                             // if !empty(towerName) set $additional to 'TowerID=$towerid'
                             if(hasID($tower)) $additional = "Tower='{$tower['id']}'";
 
@@ -169,7 +170,7 @@
                                 }
                             }
                             break;
-                        case 'Event':
+                        case 'event':
                             // if !empty(towerName) set $additional to 'TowerID=$towerid'
                             // if !empty(companyName) if !empty($additional) use $additional with %companyid, set $additional to 'CompanyID=$companyid'
                             if(hasID($tower)) $additional = "TowerID='{$tower['id']}'";
@@ -184,7 +185,7 @@
                                 }
                             }
                             break;
-                        case 'Employee':
+                        case 'employee':
                             // $tower and $company are mutually exclusive
                             // if !empty(companyName) set $additional to 'CompanyID=$companyid'
                             // if !empty(towerName) set $additional to each company with 'TowerID=$towerid'
@@ -234,7 +235,7 @@
 
                     // switch through section
                     switch ($section) {
-                        case 'Tower':
+                        case 'tower':
                             // Get ObjID and use it to gather details
                             getID($selObj, $conn, 'Towers');
                             $sql = "SELECT * FROM Towers WHERE Name='{$selObj['name']}' AND Location='{$selObj['aux']}' AND AccountID='{$selObj['id']}'";
@@ -247,7 +248,7 @@
                                     'Contact Email'=>$row['ManagementContactEmail'], 'Details'=>$row['Details']);
                             }
                             break;
-                        case 'Company':
+                        case 'company':
                             // if there's tower data use it to get company
                             if(hasID($tower)) $additional = "TowerID='{$tower['id']}'";
                             else getID($selObj, $conn, 'Companies');
@@ -262,7 +263,7 @@
                                     'Email'=>$row['ContactEmail'], 'Details'=>$row['Details']);
                             }
                             break;
-                        case 'Event':
+                        case 'event':
                             // if tower/company data exist use it to get event
                             if(hasID($tower)) $additional = "TowerID='{$tower['id']}'";
                             if(hasID($company)) $additional = (empty($additional))? "CompanyID='{$company['id']}'": "{$additional} AND CompanyID='{$company['id']}'";
@@ -277,7 +278,7 @@
                                     'Location'=>$row['Location'], 'Details'=>$row['Details']);
                             }
                             break;
-                        case 'Employee':
+                        case 'employee':
                             // if tower/company data exist use it to get employee
                             if(hasID($company)) $additional = "CompanyID='{$company['id']}'";
                             elseif (hasID($tower)) {
@@ -293,7 +294,9 @@
                             }
                             if(empty($additional)) getID($selObj, $conn, 'Employees');
 
-                            $sql = "SELECT * FROM Employees WHERE Name='{$selObj['name']}' AND Title='{$selObj['aux']}' AND";
+                            // Name does not exist in employee, split name into first and last
+                            $name = preg_split("/[\s]+/", $selObj['name']);
+                            $sql = "SELECT * FROM Employees WHERE FirstName='{$name[0]}' AND LastName='{$name[1]}' AND Title='{$selObj['aux']}' AND";
                             $sql = (empty($additional))? "{$sql} AccountID='{$selObj['id']}'": "{$sql} {$additional}";
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
@@ -326,7 +329,7 @@
      *  cases post is called
     **/
 
-    if($_SERVER["REQUEST_METHOD"] == "POST") {
+    elseif($_SERVER["REQUEST_METHOD"] == "POST") {
         $purpose = $_POST["purpose"];
         if(!empty($purpose)) {
             // Open connection to database
@@ -339,4 +342,6 @@
         }
     }
 
+
+    else sendError();
 ?>

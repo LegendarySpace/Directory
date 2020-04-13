@@ -1,72 +1,131 @@
 
 app.controller("CompanyController", function ($scope, PageData) {
     $scope.company = PageData.getCompany();
-    $scope.token = PageData.getToken();
-    $scope.tileSection = [
-        "Event",
-        "Employee"
-    ];
-    $scope.activities = [
-        {name : "ThermoDynamic", company : "Dynamic", tower : "Forum 900", details : "A BBQ hosted by Dynamic"}
-    ];
-    $scope.employees = [
-        {name : "Brit", title : "Manager", company : "Dynamic"},
-        {name : "Kyle", title : "Worker Bee", company : "Dynamic"},
-        {name : "Steve", title : "Worker Bee", company : "Dynamic"},
-        {name : "Jessica", title : "Worker Bee", company : "Dynamic"},
-        {name : "Eric", title : "Worker Bee", company : "Dynamic"},
-        {name : "Ali", title : "Worker Bee", company : "Dynamic"},
-        {name : "Jamal", title : "Worker Bee", company : "Dynamic"},
-        {name : "Kareem", title : "Worker Bee", company : "Dynamic"}
-    ];
-    
-    /*$scope.company = {
-        name : "Dynamic",
-        slogan : "Work your butt off",
-        tower : "Forum 900",
-        address : "900 2nd Ave S.",
-        suite : [1500, 1645],
-        reception : 1500,
-        phone : "6124862416",
-        email : "abc@dynamic.com",
-        accountID : 13579,
-        img : "Images/DynamicLogo.jpg"
-    };*/
-    $scope.selectedEvent = null;
-    $scope.selectedEmployee = null;
-    
-    $scope.eventDisplayButton = function (anEvent) {
-        if(anEvent === $scope.selectedEvent) {
-            $scope.selectedEvent = null;
+    // company: { name, aux }
+    // !IMPORTANT! Use &amp; instead of & to avoid &sect miscall
+    $http.jsonp(PageData.getServer + "?purpose=splash&amp;page=company&amp;name="+
+        $scope.company.name+"&amp;aux="+$scope.company.aux)
+        .then(function (response) {
+            // response.data = [splash[], sections[], admin]
+            $scope.sections = response.data.sections;
+            $scope.splash = response.data.splash;
+            $scope.admin = response.data.splash;
+            // get img also !Currently not implemented! TODO
+        }, function (response) {
+            $scope.sections = ["Event", "Employee"];
+            $scope.splash = {name:$scope.company.name, suite:$scope.company.aux};
+            $scope.admin = false;
+        });
+    $scope.selection = []; // Tiles in Selected [{section, choice}]
+    $scope.currentSection = null; // Section to display [null, Company, Event, Employee]
+    $scope.tiles = []; // Items in tile section [{},{}]
+    $scope.currentChoice = {}; // Details in bubble
+    $scope.sDisplay = null; // DisplayArea [Null, Tiles, Bubble]
+
+    $scope.loadTiles = function(section) {
+        // Retrieve tile data
+        $scope.tiles = [];
+        let url = PageData.getServer() + "?purpose=tiles&amp;section=" + section + "&amp;cname=" +
+            $scope.company.name + "&amp;caux" + $scope.company.aux;
+        $http.jsonp(url).then(function (response) {
+            $scope.tiles = response.data;
+        }, function (response) {
+            switch (section) {
+                case 'Event':
+                    $scope.tiles = [{name:'ThermoDynamic', aux:'Dynamic'}];
+                    break;
+                case 'Employee':
+                    $scope.tiles = [{name:'Maxi Volv', aux:'CEO of Dynamic'}];
+                    break;
+            }
+        });
+    }; // Handles retrieval of tile data
+    $scope.selectedClick = function(tile) {
+        // if already in section don't reload tiles
+        if($scope.currentSection !== tile.section) {
+            $scope.currentSection = tile.section;
+
+            $scope.loadTiles(tile.section);
         }
-        else {
-            $scope.selectedEvent = anEvent;
-            PageData.setEvent(anEvent);
+        $scope.currentChoice = {name: tile.choice};
+
+        // if not in tiles switch to tiles
+        if($scope.sDisplay !== "Tiles") {
+            $scope.sDisplay = "Tiles";
+        } else if($scope.currentSection === tile.section) {
+            // is in tiles and tile is current section remove tile from selection
+            let index = $scope.selection.findIndex(value => value.section === $scope.currentSection);
+            if(index > -1) $scope.selection.splice(index,1);
+            $scope.currentSection = '';
+            $scope.currentChoice = {};
+
+            // switch to null
+            $scope.sDisplay = null;
         }
-        // Display employee info
-    };
-    $scope.employeeDisplayButton = function (employee) {
-        if(employee === $scope.selectedEmployee) {
-            $scope.selectedEmployee = null;
+    }; // click function from Selected
+    $scope.chooseTile = function(tile) {
+        // update selected
+        let index = $scope.selection.findIndex( value => value.section === $scope.currentSection);
+        if(index > -1) $scope.selection[index].choice = tile.name;
+
+        // Generate URL to retrieve bubble data
+        let purpose = "purpose=bubble";
+        let section = "section=" + $scope.selection[index].section;
+        let name = "name=" + tile.name;
+        let aux = "aux=" + tile.aux;
+        let cname = "cname=" + $scope.company.name;
+        let caux = "caux=" + $scope.company.aux;
+        let url = "?" + purpose + "&amp;" + section + "&amp;" + name + "&amp;" + aux + "&amp;" +
+            cname + "&amp;" + caux;
+        url = encodeURI(url); // Sanitize String
+        // Get bubble data
+        $http.jsonp(url).then(function (response) {
+            $scope.currentChoice = response.data;
+        }, function (response) {
+            $scope.currentChoice = {'Name': tile.name, 'Other': tile.aux};
+        });
+
+        // Display bubble
+        $scope.sDisplay = "Bubble";
+    }; // click function from Tiles
+    $scope.footerClick = function(section) {
+        // Should not be displayed if true
+        if($scope.currentSection === section) { return; }
+        // if selection contains section
+        let index = $scope.selection.findIndex( value => value.section === section);
+        if(index < 0) {
+            // Not in selection - add it
+            $scope.selection.push({'section': section, choice: ''})
+        } else {
+            // Is in selection - clear it's choice
+            $scope.selection[index].choice = '';
         }
-        else {
-            $scope.selectedEmployee = employee;
-            PageData.setEmployee(employee);
+        // Update $scope.tiles with current section
+        $scope.loadTiles(section);
+        $scope.sDisplay = "Tiles";
+        $scope.currentSection = section;
+    };  // click function from footer
+    $scope.linkPage = function(section, choice) {
+        switch(section) {
+            case "Event":
+                PageData.setEvent({name: choice, aux: $scope.currentChoice.Host});
+
+                $location.path('/event');
+                $location.apply();
+                break;
+            case "Employee":
+                PageData.setEmployee({name: choice, aux: $scope.currentChoice.Title});
+                // TODO Send additional data to load the company page
+
+                $location.path('/company#employee');
+                $location.apply();
+                break;
         }
-        // Display employee info
     };
     $scope.editBar = function (edit) {
         if(edit === $scope.slideEditBar) {
             $scope.slideEditBar = null;
         }
         else $scope.slideEditBar = edit;
-    };
-    $scope.displaySuite = function () {
-        return $scope.company.suite.join(', ');
-    }
-    
-    $scope.token = {
-        accountID : null,
-        permissions : []
     };
 });

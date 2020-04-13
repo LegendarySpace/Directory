@@ -15,7 +15,7 @@
 
 #Frame {
     margin: 0;
-    position: relative;
+    /*position: relative;*/
 }
 
 #Header {
@@ -27,17 +27,18 @@
 }
 
 .content {
-    position: relative;
     width: calc(100% - var(--sidebarSize));
     background-size: contain;
     background-color: black;
     background-repeat: no-repeat;
-    height: 50em;
+    position: absolute;
+    top: 50px;
+    bottom: 0;
 }
 
 #Sidebar {
     width: var(--sidebarSize);
-    height: 150px;
+    height: 100%;
     background: yellow;
     z-index: 2;
     position: fixed;
@@ -46,7 +47,7 @@
 }
 
 #Footer {
-    width: 100%;
+    width: calc(100% - 2em);
     position: absolute;
     bottom: 0;
     background: transparent;
@@ -58,14 +59,7 @@
 
 .splash {
     width: 100%;
-    min-height: 600px;
     background-repeat: no-repeat;
-}
-
-.splash img {
-    width: 100%;
-    min-height: 200px;
-    display: none;
 }
 
 .splash .text {
@@ -186,7 +180,7 @@
     text-shadow: none;
 }
 
-.bubble link {
+.bubble .link {
     background-color: hsla(210, 13%, 50%, .8);
 }
 

@@ -1,98 +1,32 @@
 
 <div id="TowerBody" class="content" style="background-image: url('{{tower.img}}');">
-    <div class="splash" style="position: relative;">
-        <!-- Splash Image -->
-        <img ng-src="{{tower.img}}">
-        <div class="text">
-            <div ng-repeat="(x, y) in tower" ng-hide="x === 'accountID' || x === 'img'">
-                <div ng-switch="x">
-                
-                    <!-- Contains details about tower -->
-                    <div ng-switch-when="name" class="title">Name: {{ tower.name }} <span ng-hide="token.accountID != tower.accountID" ng-click="editBar(x)">&#9998;</span>
-                        <div class="slideEdit" ng-hide="token.accountID != tower.accountID || slideEditBar != '{{ x }}'">
-                            <input ng-model="value" type="text"><btn ng-click="tower[x] = value" class="w3-btn">Submit</btn><btn class="w3-btn">Cancel</btn>
-                        </div>
-                    </div>
-                
-                    <!-- Skippables -->
-                    <div ng-switch-when="accountID" ng-hide="true"></div>
-                    <div ng-switch-when="img" ng-hide="true"></div>
-                
-                    <div ng-switch-default> {{ x | capitalize }}: {{ y }} <span ng-hide="token.accountID != tower.accountID" ng-click="editBar(x)">&#9998;</span>
-                        <div class="slideEdit" ng-hide="token.accountID != tower.accountID || slideEditBar != '{{ x }}'">
-                            <input ng-model="value" type="text"><btn ng-click="tower[x] = value" class="w3-btn">Submit</btn><btn class="w3-btn">Cancel</btn>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+    <div class="splash text" ng-hide="selection.length > 0">
+        <div ng-repeat="(type, text) in splash.text" ng-switch="type">
+            <div ng-switch-when="name" class="title">{{ text }}</div>
+            <div ng-switch-default>{{ text }}</div>
         </div>
     </div>
-    
-    <div ng-repeat="section in tileSection">
-        <div class="sectionContainer">
-            <!-- Contains tile group and detail bubble -->
-            <div class="tileGroup">
-                <div ng-switch="section">
-                    <h3 class="title">{{section}}:</h3>
-                    <div class="tileContainer">
-                        
-                        <div ng-switch-when="Company" ng-repeat="item in companies | filterByTower:tower">
-                            <div ng-click="companyDisplayButton(item)" ng-show="item.name != ''" ng-selected="item === selectedCompany" class="{{ section | lowercase }}Tile displayTile">
-                                <h3>{{ item.name }}</h3>
-                                <h4>{{ item.suite }} </h4>
-                            </div>
-                        </div>
-                        
-                        <div ng-switch-when="Event" ng-repeat="item in activities | filterByCompany:selectedCompany">
-                            <div ng-click="eventDisplayButton(item)" ng-show="item.name != ''" ng-selected="item === selectedEvent" class="{{ section | lowercase }}Tile displayTile">
-                                <h3>{{ item.name }} </h3>
-                                <h4>Host: {{ item.company }} </h4>
-                                <h4>Locale: {{ item.tower }} </h4>
-                            </div>
-                        </div>
-                        
-                        <div ng-switch-when="Employee" ng-repeat="item in employees | filterByCompany:selectedCompany">
-                            <div ng-click="employeeDisplayButton(item)" ng-show="item.name != ''" ng-selected="item === selectedEmployee" class="{{ section | lowercase }}Tile displayTile">
-                                <h3>{{ item.name }} </h3>
-                                <h4>{{ item.title }} </h4>
-                                <h4>{{ item.company }} </h4>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
+    <div id="Display" ng-hide="selection.length === 0">
+        <div id="Selected" class="tileContainer">
+            <div ng-repeat="tile in selection" class="displayTile" ng-selected="currentSection === tile.section" ng-click="selectedClick(tile)">
+                <h3>{{tile.section}}</h3>
+                <h4 ng-hide="tile.choice === ''">{{tile.choice}}</h4>
             </div>
-
-            <div class="detailBubble">
-                <div ng-show="selected{{section}} != null" class="bubble">
-                    <div ng-switch="section">
-                        
-                        <div ng-switch-when="Company">
-                            <h2> {{ selectedCompany.name }} </h2>
-                            <h3> {{ selectedCompany.tower }} </h3>
-                            <h3> {{ selectedCompany.suite }} </h3>
-                            <a href="#!/company">Go to Company</a>
-                        </div>
-                        
-                        <div ng-switch-when="Event">
-                            <h1> {{ selectedEvent.name }} </h1>
-                            <h3> {{ selectedEvent.company }} </h3>
-                            <h3> {{ selectedEvent.tower }} </h3>
-                            <h3> {{ selectedEvent.detail }} </h3>
-                            <a href="#!/company">Go to Event</a>
-                        </div>
-                        
-                        <div ng-switch-when="Employee">
-                            <h1> {{ selectedEmployee.name }} </h1>
-                            <h3> {{ selectedEmployee.title }} </h3>
-                            <h3> {{ selectedEmployee.company }} </h3>
-                            <div>Special comment about employee</div>
-                        </div>
-                        
-                    </div>
-                </div>
+        </div>
+        <div class="tileGroup tileContainer" ng-hide="sDisplay !== 'Tiles'">
+            <div ng-repeat="tile in tiles" class="displayTile" ng-selected="currentChoice.name === tile.name" ng-click="chooseTile(tile)">
+                <h3>{{tile.name}}</h3>
+                <h4>{{tile.aux}}</h4>
             </div>
+        </div>
+        <div class="bubble" ng-hide="sDisplay !== 'Bubble'">
+            <div ng-repeat="(x,y) in currentChoice">{{x}}: {{y}}</div>
+            <div><span class="link" ng-click="linkPage(currentSection,currentChoice.name)">Go To {{currentSection}} Page</span></div>
+        </div>
+    </div>
+    <div id="Footer" class="tileContainer">
+        <div ng-repeat="section in sections" class="displayTile" ng-hide="currentSection === section" ng-click="footerClick(section)">
+            <h2>{{section}}</h2>
         </div>
     </div>
 </div>
