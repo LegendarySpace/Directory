@@ -1,7 +1,8 @@
 
 app.controller("LandingController", function($scope, $http, $location, PageData) {
     // !IMPORTANT! Use &amp; instead of & to avoid &sect miscall
-    $http.jsonp(PageData.getServer + '?purpose=splash&amp;page=landing')
+    // TODO Set Mime type correctly
+    $http.jsonp(PageData.getServer + 'purpose=splash&amp;page=landing')
         .then(function (response) {
             // response.data = [splash[], sections[], admin]
             $scope.sections = response.data.sections;
@@ -11,14 +12,16 @@ app.controller("LandingController", function($scope, $http, $location, PageData)
         }, function (response) {
             $scope.sections = ["Tower", "Event"];
             $scope.splash = {message:"Welcome Message", sub:"Sub Message"};
-            $scope.admin = false;
+            $scope.admin = true;
             // Execute on error
         });
+    $scope.background = 'Images/tower.jpg';
     $scope.selection = []; // Tiles in Selected [{section, choice}]
     $scope.currentSection = null; // Section to display [null, Tower, Event+]
     $scope.tiles = []; // Items in tile section [{},{}]
     $scope.currentChoice = {}; // Details in bubble
     $scope.sDisplay = null; // DisplayArea [Null, Tiles, Bubble]
+    $scope.edit = {target:null, value: null}; // Editing details
 
     $scope.loadTiles = function(section) {
         // Retrieve tile data
@@ -39,14 +42,6 @@ app.controller("LandingController", function($scope, $http, $location, PageData)
             });
     }; // Handles retrieval of tile data
     $scope.selectedClick = function(tile) {
-        // if already in section don't reload tiles
-        if($scope.currentSection !== tile.section) {
-            $scope.currentSection = tile.section;
-
-            $scope.loadTiles(tile.section);
-        }
-        $scope.currentChoice = {name: tile.choice};
-
         // if not in tiles switch to tiles
         if($scope.sDisplay !== "Tiles") {
             $scope.sDisplay = "Tiles";
@@ -59,7 +54,16 @@ app.controller("LandingController", function($scope, $http, $location, PageData)
 
             // switch to null
             $scope.sDisplay = null;
+            return;
         }
+
+        // if already in section don't reload tiles
+        if($scope.currentSection !== tile.section) {
+            $scope.currentSection = tile.section;
+
+            $scope.loadTiles(tile.section);
+        }
+        $scope.currentChoice = {name: tile.choice};
     }; // click function from Selected
     $scope.chooseTile = function(tile) {
 
@@ -72,13 +76,13 @@ app.controller("LandingController", function($scope, $http, $location, PageData)
         let section = "section=" + $scope.selection[index].section;
         let name = "name=" + tile.name;
         let aux = "aux=" + tile.aux;
-        let url = PageData.getServer + '?' + purpose + '&amp;' + section + '&amp;' + name + '&amp;' + aux;
+        let url = PageData.getServer + purpose + '&amp;' + section + '&amp;' + name + '&amp;' + aux;
         url = encodeURI(url); // Sanitize String
         // Get bubble data
         $http.jsonp(url).then(function (response) {
             $scope.currentChoice = response.data;
         }, function (response) {
-            $scope.currentChoice = {'Name': tile.name, 'Other': tile.aux};
+            $scope.currentChoice = {'name': tile.name, 'aux': tile.aux};
         });
 
         // Display bubble
@@ -105,7 +109,7 @@ app.controller("LandingController", function($scope, $http, $location, PageData)
         switch (section) {
             case "Tower":
                 // Store relevant data
-                PageData.setTower({name: choice, aux: $scope.currentChoice.Location});
+                PageData.setTower({name: $scope.currentChoice.name, aux: $scope.currentChoice.location || $scope.currentChoice.aux});
 
                 // Use $location to open new page
                 $location.path('/tower');
@@ -113,12 +117,25 @@ app.controller("LandingController", function($scope, $http, $location, PageData)
                 break;
             case "Event":
                 // Store relevant data
-                PageData.setEvent({name: choice, aux: $scope.currentChoice.Host});
+                PageData.setEvent({name: $scope.currentChoice.name, aux: $scope.currentChoice.host || $scope.currentChoice.aux});
 
                 // Use $location to open new page
                 $location.path('/event');
                 $location.apply();
                 break;
+        }
+    };
+    $scope.addTile = function (section) {
+        // TODO Create new item
+    };
+    $scope.applyEdit = function (type) {
+        // apply the change
+        if($scope.splash[type] !== $scope.edit.value) {
+            $scope.splash[type] = $scope.edit.value;
+            // TODO Send update to server
+
+            // hide the edit menu
+            $scope.edit.target = null;
         }
     };
 });

@@ -1,6 +1,7 @@
 
 app.controller("CompanyController", function ($scope, PageData) {
     $scope.company = PageData.getCompany();
+    if($scope.company.name === '') $scope.company = {name: 'Anonymous Tower', aux: 'an address', img: 'Images/dynamic.jpg'};
     // company: { name, aux }
     // !IMPORTANT! Use &amp; instead of & to avoid &sect miscall
     $http.jsonp(PageData.getServer + "?purpose=splash&amp;page=company&amp;name="+

@@ -9,10 +9,12 @@ app.config(function($routeProvider){
         controller : 'LandingController'
     })
     .when("/tower", {
-        templateUrl : 'TowerPage.html',
+        // Only switch controller, pages had only minor differences
+        templateUrl : 'LandingPage.html',
         controller : 'TowerController'
     })
     .when("/company", {
+        // TODO Setup company controller to function on landing page also
         templateUrl : "CompanyPage.html",
         controller : "CompanyController"
     })
@@ -25,7 +27,7 @@ app.config(function($routeProvider){
 app.filter('filterByTower', function () {
     return function (x, selected) {
         if (selected === null || !angular.isDefined(selected) || x.length < 1) { return x; }
-        var filtered = [];
+        let filtered = [];
         x.forEach(function (company) {
             if (company.tower === selected.name) { filtered.push(company); }
         });
@@ -35,7 +37,7 @@ app.filter('filterByTower', function () {
 app.filter('filterByCompany', function () {
     return function (x, selected) {
         if (selected === null || !angular.isDefined(selected) || x.length < 1) { return x; }
-        var filtered = [];
+        let filtered = [];
         x.forEach(function (employee) {
             if (employee.company === selected.name) { filtered.push(employee); }
         });
@@ -45,7 +47,7 @@ app.filter('filterByCompany', function () {
 app.filter('excludeHidden', function () {
     return function (x) {
         if (x.length < 1) { return x; }
-        var filtered = [];
+        let filtered = [];
         for (key in x) {
             if (key !== 'accountID' && key !== 'img') { filtered.push(x); }
         }
@@ -54,7 +56,12 @@ app.filter('excludeHidden', function () {
 });
 app.filter('capitalize', function() {
     return function(input) {
-      return (angular.isString(input) && input.length > 0) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : input;
+        if (!angular.isString(input)) return input;
+        let red = function (res, cur) {
+            let temp = cur.charAt(0).toUpperCase() + cur.substr(1).toLowerCase();
+            return (!res)? res = temp: res += ' ' + temp;
+        };
+      return input.split(" ").reduce(red, "");
     }
 });
 
@@ -64,9 +71,7 @@ app.factory('PageData', function () {
     var savedCompany = {};
     var savedEmployee = {};
     var savedEvent = {};
-    var serverURL = 'http://fauxdirectory.rf.gd/#!/Responder.php';
-    var savedToken = {};
-    // var userToken = { level : null, permissions : []};
+    var serverURL = 'Responder.php?';
     function setTower (tower) {
         savedTower = tower;
     }
@@ -78,9 +83,6 @@ app.factory('PageData', function () {
     }
     function setEmployee (employee) {
         savedEmployee = employee;
-    }
-    function setToken (token) {
-        savedToken = token
     }
     function getTower () {
         return savedTower;
@@ -94,20 +96,15 @@ app.factory('PageData', function () {
     function getEmployee () {
         return savedEmployee;
     }
-    function getToken() {
-        return savedToken;
-    }
     return {
         setTower : setTower,
         setCompany : setCompany,
         setEvent : setEvent,
         setEmployee : setEmployee,
-        setToken : setToken,
         getTower : getTower,
         getCompany : getCompany,
         getEvent : getEvent,
         getEmployee : getEmployee,
-        getToken : getToken,
         getServer : serverURL
     }
 });

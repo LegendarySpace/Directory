@@ -1,7 +1,7 @@
 
 <div id="TowerBody" class="content" style="background-image: url('{{tower.img}}');">
     <div class="splash text" ng-hide="selection.length > 0">
-        <div ng-repeat="(type, text) in splash.text" ng-switch="type">
+        <div ng-repeat="(type, text) in splash" ng-switch="type">
             <div ng-switch-when="name" class="title">{{ text }}</div>
             <div ng-switch-default>{{ text }}</div>
         </div>

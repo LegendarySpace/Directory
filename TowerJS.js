@@ -1,6 +1,8 @@
 
 app.controller("TowerController", function ($scope, $http, $location, PageData) {
+    // On failure to load should return to main page
     $scope.tower = PageData.getTower();
+    if($scope.tower.name === '') $scope.tower = {name: 'Anonymous Tower', aux: 'an address'};
     // tower: { name, aux }
     // !IMPORTANT! Use &amp; instead of & to avoid &sect miscall
     $http.jsonp(PageData.getServer + "?purpose=splash&amp;page=tower&amp;name="+
@@ -16,6 +18,7 @@ app.controller("TowerController", function ($scope, $http, $location, PageData) 
             $scope.splash = {name:$scope.tower.name, location:$scope.tower.aux};
             $scope.admin = false;
         });
+    $scope.background = $scope.tower.img || 'Images/tower1.jpg';
     $scope.selection = []; // Tiles in Selected [{section, choice}]
     $scope.currentSection = null; // Section to display [null, Company, Event, Employee]
     $scope.tiles = []; // Items in tile section [{},{}]

@@ -2,16 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="14a2288f-cb27-425a-bc37-05306fe19a89" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CompanyJS.js" beforeDir="false" afterPath="$PROJECT_DIR$/CompanyJS.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CompanyPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/CompanyPage.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DirectoryCSS.css" beforeDir="false" afterPath="$PROJECT_DIR$/DirectoryCSS.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frame.html" beforeDir="false" afterPath="$PROJECT_DIR$/Frame.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LandingJS.js" beforeDir="false" afterPath="$PROJECT_DIR$/LandingJS.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LandingPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/LandingPage.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Responder.php" beforeDir="false" afterPath="$PROJECT_DIR$/Responder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ServiceModule.js" beforeDir="false" afterPath="$PROJECT_DIR$/ServiceModule.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TowerJS.js" beforeDir="false" afterPath="$PROJECT_DIR$/TowerJS.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TowerPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/TowerPage.html" afterDir="false" />
     </list>
@@ -223,6 +221,7 @@
       <workItem from="1586500065390" duration="1158000" />
       <workItem from="1586501238672" duration="45407000" />
       <workItem from="1586720346964" duration="22626000" />
+      <workItem from="1586898830130" duration="37933000" />
     </task>
     <servers />
   </component>
@@ -234,6 +233,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="540" y="174" key="#CLI_Interpreters/0.0.1920.1040@0.0.1920.1040" timestamp="1586666411327" />
+    <state x="552" y="178" key="#Code_Folding" timestamp="1587102526719">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="178" key="#Code_Folding/0.0.1920.1040@0.0.1920.1040" timestamp="1587102526719" />
     <state x="552" y="178" key="#Other_File_Types" timestamp="1586462399713">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

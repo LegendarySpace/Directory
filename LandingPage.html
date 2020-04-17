@@ -1,9 +1,20 @@
 
-<div id="LandingBody" class="content" style="background-image: url('Images/Tower.jpg')">
-    <div class="splash text" ng-hide="selection.length > 0">
-        <div ng-repeat="(type, text) in splash.text" ng-switch="type">
-            <div ng-switch-when="message" class="title">{{ text }}</div>
-            <div ng-switch-default>{{ text }}</div>
+<div id="LandingBody" class="content" style="background-image: url('{{background}}')">
+    <div class="splash" ng-hide="selection.length > 0">
+        <div ng-repeat="(type, text) in splash" class="text">
+            <span ng-hide="edit.target === type" ng-switch="type">
+                <span ng-switch-when="message" class="title">{{ text }}</span>
+                <span ng-switch-when="name" class="title">{{ text }}</span>
+                <span ng-switch-default>{{ text }}</span>
+                <span ng-show="admin" ng-click="edit.target = type; edit.value = text">&#9998;</span>
+            </span>
+            <span ng-hide="edit.target !== type" ng-switch="type">
+                <input type="email" name="{{type}}" ng-model="edit.value" ng-switch-when="email">
+                <input type="tel" name="{{type}}" ng-model="edit.value" ng-switch-when="phone">
+                <input type="text" name="{{type}}" ng-model="edit.value" ng-switch-default>
+                <input type="button" name="accept" ng-click="applyEdit(type)" value="Accept">{{edit}} <!-- TODO submit update if different -->
+                <input type="button" name="cancel" ng-click="edit.target = null" value="Cancel">
+            </span>
         </div>
     </div>
     <div id="Display" ng-hide="selection.length === 0">
@@ -18,10 +29,14 @@
                 <h3>{{tile.name}}</h3>
                 <h4>{{tile.aux}}</h4>
             </div>
+            <div ng-if="true" class="displayTile" ng-click="addTile(currentSection)">
+                <img src="Images/plus.png" />
+            </div>
         </div>
         <div class="bubble" ng-hide="sDisplay !== 'Bubble'">
-            <div ng-repeat="(x,y) in currentChoice">{{x}}: {{y}}</div>
-            <div><span class="link" ng-click="linkPage(currentSection,currentChoice.name)">Go To {{currentSection}} Page</span></div>
+            <!-- TODO If section = event or employee allow editing. Editing should deploy the create modal filled out -->
+            <div ng-repeat="(x,y) in currentChoice">{{x | capitalize}}: {{y}}</div>
+            <div><span class="link" ng-click="linkPage(currentSection)">Go To {{currentSection}} Page</span></div>
         </div>
 
     </div>

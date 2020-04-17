@@ -7,9 +7,9 @@
     $username = "epiz_25453908";
     $password = "SfKHOiolSYO3Yh";
     $dbname = "epiz_25453908_Directory";
-    function sendError() {
+    function sendError(str) {
         http_response_code(500);
-        return 'Item not found';
+        return 'str || Item not found';
     }
     function sendData($data) {
 		header("Content-Type: application/json");
@@ -128,10 +128,10 @@
 	                        $sectionsArray = array('Event', 'Employee');
                             break;
                         default:
-                            echo sendError();
+                            echo sendError("Page data invalid: {$page}");
                     }
                     //  if any are empty send error
-                    if (empty($splashArray) || empty($sectionsArray) || $admin === null) echo sendError();
+                    if (empty($splashArray) || empty($sectionsArray) || $admin === null) echo sendError("Empty arrays");
                     else echo sendData(array('splash'=>$splashArray, 'sections'=>$sectionsArray, 'admin'=>$admin));
                     break;
 
@@ -243,9 +243,9 @@
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
                                 $row= $result->fetch_assoc();
-                                $bubbleArray = array('Name'=>$row['Name'],'Location'=>$row['Location'],
-                                    'Management'=>$row['ManagementCompany'],'Contact Number'=>$row['ManagementContact'],
-                                    'Contact Email'=>$row['ManagementContactEmail'], 'Details'=>$row['Details']);
+                                $bubbleArray = array('name'=>$row['Name'],'location'=>$row['Location'],
+                                    'management'=>$row['ManagementCompany'],'contact number'=>$row['ManagementContact'],
+                                    'contact email'=>$row['ManagementContactEmail'], 'details'=>$row['Details']);
                             }
                             break;
                         case 'company':
@@ -258,9 +258,9 @@
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
                                 $row = $result->fetch_assoc();
-                                $bubbleArray = array('Name'=>$row['Name'], 'Slogan'=>$row['Slogan'], 'Suites'=>$row['Suite'],
-                                    'Reception'=>$row['Reception'], 'Phone'=>$row['ContactNumber'],
-                                    'Email'=>$row['ContactEmail'], 'Details'=>$row['Details']);
+                                $bubbleArray = array('name'=>$row['Name'], 'slogan'=>$row['Slogan'], 'suites'=>$row['Suite'],
+                                    'reception'=>$row['Reception'], 'phone'=>$row['ContactNumber'],
+                                    'email'=>$row['ContactEmail'], 'details'=>$row['Details']);
                             }
                             break;
                         case 'event':
@@ -274,8 +274,8 @@
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
                                 $row = $result->fetch_assoc();
-                                $bubbleArray = array('Name'=>$row['Name'], 'Slogan'=>$row['Slogan'], 'Host'=>$row['Host'],
-                                    'Location'=>$row['Location'], 'Details'=>$row['Details']);
+                                $bubbleArray = array('name'=>$row['Name'], 'slogan'=>$row['Slogan'], 'host'=>$row['Host'],
+                                    'location'=>$row['Location'], 'details'=>$row['Details']);
                             }
                             break;
                         case 'employee':
@@ -302,8 +302,8 @@
                             if($result->num_rows > 0) {
                                 $row = $result->fetch_assoc();
                                 if($row['Public']) {
-                                    $bubbleArray = array('First Name' => $row['FirstName'], 'Last Name' => $row['LastName'],
-                                        'Title' => $row['Title'], 'Phone' => $row['Phone'], 'Email' => $row['Email']);
+                                    $bubbleArray = array('first name' => $row['FirstName'], 'last name' => $row['LastName'],
+                                        'title' => $row['Title'], 'phone' => $row['Phone'], 'email' => $row['Email']);
                                 }
                             }
                             break;

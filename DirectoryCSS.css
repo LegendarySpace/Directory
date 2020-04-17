@@ -20,10 +20,32 @@
 
 #Header {
     width: 100%;
+    max-height: 50px;
     height: 50px;
-    background: orange;
+    background: navy;
     position: relative;
     z-index: 3;
+}
+
+#Header * {
+    max-height: inherit;
+    height: inherit;
+    display: inline-block;
+}
+
+#login {
+    float: right;
+    height: 30px;
+    margin: 10px;
+    width: 40%;
+}
+
+#Header>div {
+    width: 33%;
+    float: right;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .content {
@@ -43,7 +65,6 @@
     z-index: 2;
     position: fixed;
     right: 0;
-    top: 0;
 }
 
 #Footer {
@@ -58,14 +79,13 @@
 
 
 .splash {
-    width: 100%;
     background-repeat: no-repeat;
-}
-
-.splash .text {
     position: absolute;
     top: 3em;
     left: 50%;
+}
+
+.splash .text {
     padding: 1em 3em;
     color: aliceblue;
     text-align: center;
@@ -145,6 +165,11 @@
 .displayTile:active {
     top: 3px;
     box-shadow: 0 2px 0 0 var(--tileShadow);
+}
+
+.displayTile>img {
+    max-height: 75%;
+    padding: .8em;
 }
 
 [selected] {
