@@ -12,13 +12,14 @@
         <script src="CompanyJS.js"></script>
     </head>
 
-    <body id="Frame" ng-app="Frame" ng-controller="FrameController">
-        <div id="Header">
+    <body id="frame" ng-app="Directory" ng-controller="FrameController">
+        <div id="header">
             <!-- contains centered logo and right aligned sign in button/user -->
-            <div><input type="button" id="login" value="Log In" /></div>
+            <div><input type="button" id="login" value="Log In" ng-click="login.display = true" /></div>
             <div style="background-image: url(Images/FoxFLogo.png)"></div>
         </div>
-        <div id="Sidebar">
+        <div ng-if="login.display" ng-include src="'login.html'"></div>
+        <div id="sidebar">
             <div id="Weather" class="sidebar">
                 <!-- Weather -->
                 <a class="weatherwidget-io" href="https://forecast7.com/en/44d98n93d27/minneapolis/?unit=us" data-label_1="MINNEAPOLIS" data-days="5" data-theme="original" >MINNEAPOLIS</a>

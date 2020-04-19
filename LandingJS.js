@@ -2,7 +2,7 @@
 app.controller("LandingController", function($scope, $http, $location, PageData) {
     // !IMPORTANT! Use &amp; instead of & to avoid &sect miscall
     // TODO Set Mime type correctly
-    $http.jsonp(PageData.getServer + 'purpose=splash&amp;page=landing')
+    $http.jsonp(PageData.getServer + 'purpose=splash&page=landing')
         .then(function (response) {
             // response.data = [splash[], sections[], admin]
             $scope.sections = response.data.sections;
@@ -15,7 +15,8 @@ app.controller("LandingController", function($scope, $http, $location, PageData)
             $scope.admin = true;
             // Execute on error
         });
-    $scope.background = 'Images/tower.jpg';
+    $scope.background = 'Images/Tower.jpg';
+    $scope.form = {display: false, content: null, type: null};
     $scope.selection = []; // Tiles in Selected [{section, choice}]
     $scope.currentSection = null; // Section to display [null, Tower, Event+]
     $scope.tiles = []; // Items in tile section [{},{}]
@@ -26,14 +27,14 @@ app.controller("LandingController", function($scope, $http, $location, PageData)
     $scope.loadTiles = function(section) {
         // Retrieve tile data
         $scope.tiles = [];
-        $http.jsonp(PageData.getServer + 'purpose=tiles&amp;section=' + section)
+        $http.jsonp(PageData.getServer + 'purpose=tiles&section=' + section)
             .then(function (response) {
                 $scope.tiles = response.data;
             }, function (response) {
                 switch (section) {
                     case 'Tower':
                         $scope.tiles = [{name:'Forum 900', aux:'900 2nd Ave'},{name:'AT&T', aux:'901 Marquette Ave'},
-                            {name:'121 Tower', aux:'121 S 8th St'},{name:'Wayne Tower', aux:'84th Gotham Ave'},{name:'Metropolitan Tower', aux:'145 Metropolis Circle'}];
+                            {name:'121 Tower', aux:'121 S 8th St'},{name:'Wayne Tower', aux:'84th Gotham Ave'}];
                         break;
                     case 'Event':
                         $scope.tiles = [{name:'ThermoDynamic', aux:'Dynamic'},{name:'Photo Op with Bruce Wayne', aux:'WayneTech'}];
@@ -76,7 +77,7 @@ app.controller("LandingController", function($scope, $http, $location, PageData)
         let section = "section=" + $scope.selection[index].section;
         let name = "name=" + tile.name;
         let aux = "aux=" + tile.aux;
-        let url = PageData.getServer + purpose + '&amp;' + section + '&amp;' + name + '&amp;' + aux;
+        let url = PageData.getServer + purpose + '&' + section + '&' + name + '&' + aux;
         url = encodeURI(url); // Sanitize String
         // Get bubble data
         $http.jsonp(url).then(function (response) {
@@ -125,11 +126,35 @@ app.controller("LandingController", function($scope, $http, $location, PageData)
                 break;
         }
     };
-    $scope.addTile = function (section) {
+    $scope.newTile = function (section) {
         // TODO Create new item
+        // GET content for form data
+        $scope.form.content = null;
+        $scope.form.type = section;
+        let url = PageData.getServer() + 'purpose=form&item='+ section;
+        $http.jsonp(url).then(function (response) {
+            $scope.form.content = response.data;
+        }, function (response) {
+            $scope.form.content = {};
+        });
+        // if not empty open form
+        if(!$scope.form.content.empty()) {
+            PageData.getForm($scope.form);
+            $scope.form.display = true;
+        }
+    };
+    $scope.addItem = function () {
+        // TODO POST data to server depending on type
+        let url = PageData.getServer() + 'item=' + $scope.form.context;
+        $http.post(url, JSON.stringify($scope.form.content))
+            .then(function (response) {
+
+            }, function (response) {
+
+            });
     };
     $scope.applyEdit = function (type) {
-        // apply the change
+        // apply the change if different
         if($scope.splash[type] !== $scope.edit.value) {
             $scope.splash[type] = $scope.edit.value;
             // TODO Send update to server

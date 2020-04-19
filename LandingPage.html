@@ -12,7 +12,7 @@
                 <input type="email" name="{{type}}" ng-model="edit.value" ng-switch-when="email">
                 <input type="tel" name="{{type}}" ng-model="edit.value" ng-switch-when="phone">
                 <input type="text" name="{{type}}" ng-model="edit.value" ng-switch-default>
-                <input type="button" name="accept" ng-click="applyEdit(type)" value="Accept">{{edit}} <!-- TODO submit update if different -->
+                <input type="button" name="accept" ng-click="applyEdit(type)" value="Accept">
                 <input type="button" name="cancel" ng-click="edit.target = null" value="Cancel">
             </span>
         </div>
@@ -29,7 +29,8 @@
                 <h3>{{tile.name}}</h3>
                 <h4>{{tile.aux}}</h4>
             </div>
-            <div ng-if="true" class="displayTile" ng-click="addTile(currentSection)">
+            <!-- TODO Don't display if tower or company -->
+            <div ng-if="true" class="displayTile" ng-click="newTile(currentSection)">
                 <img src="Images/plus.png" />
             </div>
         </div>
@@ -40,9 +41,11 @@
         </div>
 
     </div>
-    <div id="Footer" class="tileContainer">
+    <div id="footer" class="tileContainer">
         <div ng-repeat="section in sections" class="displayTile" ng-hide="currentSection === section" ng-click="footerClick(section)">
             <h2>{{section}}</h2>
         </div>
     </div>
+    <!-- TODO Include html for Form Submission modal -->
+    <div ng-if="form.display" ng-include src="'form.html'"></div>
 </div>

@@ -1,0 +1,48 @@
+
+<div class="modal" ng-controller="LoginController">
+    <div class="cont">
+        <div class="head">
+            <img src="Images/FoxFLogo.png" style="max-height: 5em">
+            <span class="title">Faux Directory</span>
+        </div>
+        <div ng-repeat="(x,y) in login.content">
+            <label>{{x|capitalize}}:</label>
+            <input type="text" ng-required>
+        </div>
+        <div ng-if="register.display">
+            <select ng-model="register.type">
+                <option value="tower">Tower</option>
+                <option value="company">Company</option>
+            </select>
+            <div ng-if="register.type === 'tower'">
+                <div ng-repeat="(x,y) in register.tower" ng-switch="x">
+                    <label>{{x|capitalize}}:</label>
+                    <input ng-switch-when="number" type="tel" ng-model="register.tower[x]">
+                    <input ng-switch-when="email" type="email" ng-model="register.tower[x]">
+                    <input ng-switch-when="image" type="image" ng-model="register.tower[x]">
+                    <input ng-switch-default type="text" ng-model="register.tower[x]">
+                </div>
+            </div>
+            <div ng-if="register.type === 'company'">
+                <div ng-repeat="(x,y) in register.company" ng-switch="x">
+                    <label>{{x|capitalize}}:</label>
+                    <input ng-switch-when="number" type="tel" ng-model="register.company[x]">
+                    <input ng-switch-when="email" type="email" ng-model="register.company[x]">
+                    <input ng-switch-when="image" type="image" ng-model="register.company[x]">
+                    <div ng-switch-when="suite"><!-- array of numbers -->
+                        <div ng-repeat="value in y">
+                            <input type="number" ng-model="value">
+                            <input type="radio" ng-model="register.company.reception" ng-value="value">
+                            <span ng-click="remove">x</span>
+                        </div>
+                        <div ng-click="y.push(0)">Add another</div>
+                        <div>Reception area is {{register.company.reception}}</div>
+                    </div>
+                    <input ng-switch-default type="text" ng-model="register.company[x]">
+                </div>
+            </div>
+        </div>
+        <div><input type="button" value="Submit"><input type="button" value="Cancel" ng-click="login.display = false"></div>
+        <div class="link" ng-if="!register.display" ng-click="register.display = true;getModal()">Click HERE to Register</div>
+    </div>
+</div>
