@@ -5,12 +5,12 @@ app.controller("LandingCtrl", function($scope, $http, $location, PageData) {
             // response.data = [splash[], sections[], admin]
             $scope.sections = response.data.sections;
             $scope.splash = response.data.splash;
-            $scope.admin = response.data.admin;
+            $scope.splash.admin = response.data.admin;
             // query content and set background url to img
         }, function (response) {
             $scope.sections = ["Tower", "Event"];
             $scope.splash = {message:"Welcome Message", sub:"Sub Message"};
-            $scope.admin = true;
+            $scope.splash.admin = false;
             // Execute on error
         });
     $scope.background = 'Images/Tower.jpg';
@@ -28,8 +28,8 @@ app.controller("LandingCtrl", function($scope, $http, $location, PageData) {
         // if(!$scope.tile[section]) server call
         // else $scope.tiles = $scope.tile[section]
         $scope.tiles = [];
-        $http.jsonp(PageData.getServer + 'purpose=tiles&section=' + section.toLowerCase())
-            .then(function (response) {
+        let url = PageData.getServer + 'purpose=tiles&section=' + section.toLowerCase();
+        $http.jsonp(url).then(function (response) {
                 $scope.tiles = response.data.tiles;
             }, function (response) {
                 switch (section) {
@@ -38,7 +38,7 @@ app.controller("LandingCtrl", function($scope, $http, $location, PageData) {
                             {name:'121 Tower', aux:'121 S 8th St'},{name:'Wayne Tower', aux:'84th Gotham Ave'}];
                         break;
                     case 'Event':
-                        $scope.tiles = [{name:'ThermoDynamic', aux:'Dynamic'},{name:'Photo Op with Bruce Wayne', aux:'WayneTech'}];
+                        $scope.tiles = [{name:'ThermoDynamic', aux:'Dynamic'}];
                         break;
                 }
             });
@@ -69,7 +69,6 @@ app.controller("LandingCtrl", function($scope, $http, $location, PageData) {
         tile.choice = null;
     }; // click function from Selected
     $scope.chooseTile = function(tile) {
-
         // update selected
         let index = $scope.selection.findIndex(value => value.section === $scope.currentSection);
         if(index > -1) $scope.selection[index].choice = tile.name;
@@ -116,7 +115,6 @@ app.controller("LandingCtrl", function($scope, $http, $location, PageData) {
 
                 // Use $location to open new page
                 $location.path('/tower');
-                $location.apply();
                 break;
             case "Event":
                 // Store relevant data
@@ -124,7 +122,6 @@ app.controller("LandingCtrl", function($scope, $http, $location, PageData) {
 
                 // Use $location to open new page
                 $location.path('/event');
-                $location.apply();
                 break;
         }
     };

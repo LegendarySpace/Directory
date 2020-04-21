@@ -2,36 +2,35 @@
 app.controller("TowerCtrl", function ($scope, $http, $location, PageData) {
     // On failure to load should return to main page
     $scope.tower = PageData.getTower();
-    if($scope.tower.name === '') $scope.tower = {name: 'Anonymous Tower', aux: 'an address'};
-    // tower: { name, aux }
-    // !IMPORTANT! Use &amp; instead of & to avoid &sect miscall
-    $http.jsonp(PageData.getServer + "?purpose=splash&amp;page=tower&amp;name="+
-        $scope.tower.name+"&amp;aux="+$scope.tower.aux)
+    if($scope.tower.name === '') $location.path('/');
+    $http.jsonp(PageData.getServer + "purpose=splash&page=tower&name="+$scope.tower.name+"&aux="+$scope.tower.aux)
         .then(function (response) {
             // response.data = [splash[], sections[], admin]
             $scope.sections = response.data.sections;
             $scope.splash = response.data.splash;
-            $scope.admin = response.data.splash;
-            // get img also !Currently not implemented! TODO
+            $scope.splash.admin = response.data.splash;
+            $scope.background = ($scope.splash.img)? 'Images/'+$scope.splash.img: 'Images/Tower1.jpg';
         }, function (response) {
             $scope.sections = ["Company", "Event", "Employee"];
             $scope.splash = {name:$scope.tower.name, location:$scope.tower.aux};
-            $scope.admin = false;
+            $scope.splash.admin = false;
+            $scope.background = ($scope.splash.img)? 'Images/'+$scope.splash.img: 'Images/Tower1.jpg';
         });
-    $scope.background = 'Images/'+$scope.splash.img || 'Images/Tower1.jpg';
+    $scope.form = {display: false, content: null, type: null};
     $scope.selection = []; // Tiles in Selected [{section, choice}]
-    $scope.currentSection = null; // Section to display [null, Company, Event, Employee]
+    $scope.currentSection = null; // Section to display [null, Tower, Event+]
     $scope.tiles = []; // Items in tile section [{},{}]
     $scope.currentChoice = {}; // Details in bubble
     $scope.sDisplay = null; // DisplayArea [Null, Tiles, Bubble]
+    $scope.edit = {target:null, value: null}; // Editing details
 
     $scope.loadTiles = function(section) {
         // Retrieve tile data
         $scope.tiles = [];
-        let url = PageData.getServer() + "?purpose=tiles&amp;section=" + section + "&amp;tname=" +
-            $scope.tower.name + "&amp;taux" + $scope.tower.aux;
+        let url = PageData.getServer + "?purpose=tiles&section=" + section.toLowerCase() + "&tname=" +
+            $scope.tower.name + "&taux" + $scope.tower.aux;
         $http.jsonp(url).then(function (response) {
-            $scope.tiles = response.data;
+            $scope.tiles = response.data.tiles;
         }, function (response) {
             switch (section) {
                 case 'Company':
@@ -47,14 +46,6 @@ app.controller("TowerCtrl", function ($scope, $http, $location, PageData) {
         });
     }; // Handles retrieval of tile data
     $scope.selectedClick = function(tile) {
-        // if already in section don't reload tiles
-        if($scope.currentSection !== tile.section) {
-            $scope.currentSection = tile.section;
-
-            $scope.loadTiles(tile.section);
-        }
-        $scope.currentChoice = {name: tile.choice};
-
         // if not in tiles switch to tiles
         if($scope.sDisplay !== "Tiles") {
             $scope.sDisplay = "Tiles";
@@ -67,7 +58,17 @@ app.controller("TowerCtrl", function ($scope, $http, $location, PageData) {
 
             // switch to null
             $scope.sDisplay = null;
+            return;
         }
+
+        // if already in section don't reload tiles
+        if($scope.currentSection !== tile.section) {
+            $scope.currentSection = tile.section;
+
+            $scope.loadTiles(tile.section);
+        }
+        $scope.currentChoice = {name: tile.choice};
+        tile.choice = null;
     }; // click function from Selected
     $scope.chooseTile = function(tile) {
         // update selected
@@ -76,17 +77,16 @@ app.controller("TowerCtrl", function ($scope, $http, $location, PageData) {
 
         // Generate URL to retrieve bubble data
         let purpose = "purpose=bubble";
-        let section = "section=" + $scope.selection[index].section;
+        let section = "section=" + $scope.selection[index].section.toLowerCase();
         let name = "name=" + tile.name;
         let aux = "aux=" + tile.aux;
         let tname = "tname=" + $scope.tower.name;
         let taux = "taux=" + $scope.tower.aux;
-        let url = "?" + purpose + "&amp;" + section + "&amp;" + name + "&amp;" + aux + "&amp;" +
-            tname + "&amp;" + taux;
+        let url = PageData.getServer + purpose + "&" + section + "&" + name + "&" + aux + "&" + tname + "&" + taux;
         url = encodeURI(url); // Sanitize String
         // Get bubble data
         $http.jsonp(url).then(function (response) {
-            $scope.currentChoice = response.data;
+            $scope.currentChoice = response.data.bubble;
         }, function (response) {
             $scope.currentChoice = {'Name': tile.name, 'Other': tile.aux};
         });
@@ -115,31 +115,59 @@ app.controller("TowerCtrl", function ($scope, $http, $location, PageData) {
         switch(section) {
             case "Company":
                 // Store relevant data
-                PageData.setCompany({name: choice, aux: $scope.currentChoice.Reception});
+                PageData.setCompany({name: $scope.currentChoice.name, aux: $scope.currentChoice.reception || $scope.currentChoice.aux});
 
                 // Use $location to open new page
                 $location.path('/company');
-                $location.apply();
                 break;
             case "Event":
-                PageData.setEvent({name: choice, aux: $scope.currentChoice.Host});
+                PageData.setEvent({name: $scope.currentChoice.name, aux: $scope.currentChoice.host || $scope.currentChoice.aux});
 
                 $location.path('/event');
-                $location.apply();
                 break;
             case "Employee":
-                PageData.setEmployee({name: choice, aux: $scope.currentChoice.Title});
+                PageData.setEmployee({name: $scope.currentChoice.name, aux: $scope.currentChoice.title || $scope.currentChoice.aux});
                 // TODO Send additional data to load the company page
 
                 $location.path('/company#employee');
-                $location.apply();
                 break;
         }
     };
-    $scope.editBar = function (edit) {
-        if(edit === $scope.slideEditBar) {
-            $scope.slideEditBar = null;
+    $scope.newTile = function (section) {
+        // TODO Create new item
+        // GET content for form data
+        $scope.form.content = null;
+        $scope.form.type = section;
+        let url = PageData.getServer() + 'purpose=form&item='+ section;
+        $http.jsonp(url).then(function (response) {
+            $scope.form.content = response.data;
+        }, function (response) {
+            $scope.form.content = {};
+        });
+        // if not empty open form
+        if(!$scope.form.content.empty()) {
+            PageData.getForm($scope.form);
+            $scope.form.display = true;
         }
-        else $scope.slideEditBar = edit;
+    };
+    $scope.addItem = function () {
+        // TODO POST data to server depending on type
+        let url = PageData.getServer() + 'item=' + $scope.form.context;
+        $http.post(url, JSON.stringify($scope.form.content))
+            .then(function (response) {
+
+            }, function (response) {
+
+            });
+    };
+    $scope.applyEdit = function (type) {
+        // apply the change if different
+        if($scope.splash[type] !== $scope.edit.value) {
+            $scope.splash[type] = $scope.edit.value;
+            // TODO Send update to server
+
+            // hide the edit menu
+            $scope.edit.target = null;
+        }
     };
 });

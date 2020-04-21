@@ -1,13 +1,14 @@
 
 <div id="LandingBody" class="content" style="background-image: url('{{background}}')">
-    <div class="splash" ng-hide="selection.length > 0">
-        <div ng-repeat="(type, text) in splash" class="text">
+    <div class="splash text" ng-hide="selection.length > 0">
+        <div ng-repeat="(type, text) in splash">
             <span ng-hide="edit.target === type" ng-switch="type">
                 <span ng-switch-when="message" class="title">{{ text }}</span>
                 <span ng-switch-when="name" class="title">{{ text }}</span>
+                <span ng-switch-when="admin"></span><!-- Hide admin -->
                 <span ng-switch-when="img"></span><!-- Hide img -->
                 <span ng-switch-default>{{ text }}</span>
-                <span ng-show="admin" ng-click="edit.target = type; edit.value = text">&#9998;</span>
+                <span ng-show="splash.admin" ng-click="edit.target = type; edit.value = text">&#9998;</span>
             </span>
             <span ng-hide="edit.target !== type" ng-switch="type">
                 <input type="email" name="{{type}}" ng-model="edit.value" ng-switch-when="email">

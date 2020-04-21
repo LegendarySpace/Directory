@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="14a2288f-cb27-425a-bc37-05306fe19a89" name="Default Changelist" comment="">
       <change afterPath="$PROJECT_DIR$/FormCtrl.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Images/DailyPlanet.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Images/WayneTower.jpg" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/LoginCtrl.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CompanyJS.js" beforeDir="false" afterPath="$PROJECT_DIR$/CompanyCtrl.js" afterDir="false" />
@@ -71,7 +73,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../Program Files/PHP/php.exe" />
+    <property name="last_opened_file_path" value="D:/Program Files/PHP/php.exe" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -286,7 +288,7 @@
       <workItem from="1586898830130" duration="41120000" />
       <workItem from="1587105809400" duration="4194000" />
       <workItem from="1587111917893" duration="47652000" />
-      <workItem from="1587440992426" duration="10635000" />
+      <workItem from="1587440992426" duration="17998000" />
     </task>
     <servers />
   </component>
