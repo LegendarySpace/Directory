@@ -1,11 +1,12 @@
 
-app.controller("CompanyController", function ($scope, PageData) {
-    $scope.company = PageData.getCompany();
-    if($scope.company.name === '') $scope.company = {name: 'Anonymous Tower', aux: 'an address', img: 'Images/dynamic.jpg'};
-    // company: { name, aux }
+app.controller("TowerCtrl", function ($scope, $http, $location, PageData) {
+    // On failure to load should return to main page
+    $scope.tower = PageData.getTower();
+    if($scope.tower.name === '') $scope.tower = {name: 'Anonymous Tower', aux: 'an address'};
+    // tower: { name, aux }
     // !IMPORTANT! Use &amp; instead of & to avoid &sect miscall
-    $http.jsonp(PageData.getServer + "?purpose=splash&amp;page=company&amp;name="+
-        $scope.company.name+"&amp;aux="+$scope.company.aux)
+    $http.jsonp(PageData.getServer + "?purpose=splash&amp;page=tower&amp;name="+
+        $scope.tower.name+"&amp;aux="+$scope.tower.aux)
         .then(function (response) {
             // response.data = [splash[], sections[], admin]
             $scope.sections = response.data.sections;
@@ -13,10 +14,11 @@ app.controller("CompanyController", function ($scope, PageData) {
             $scope.admin = response.data.splash;
             // get img also !Currently not implemented! TODO
         }, function (response) {
-            $scope.sections = ["Event", "Employee"];
-            $scope.splash = {name:$scope.company.name, suite:$scope.company.aux};
+            $scope.sections = ["Company", "Event", "Employee"];
+            $scope.splash = {name:$scope.tower.name, location:$scope.tower.aux};
             $scope.admin = false;
         });
+    $scope.background = 'Images/'+$scope.splash.img || 'Images/Tower1.jpg';
     $scope.selection = []; // Tiles in Selected [{section, choice}]
     $scope.currentSection = null; // Section to display [null, Company, Event, Employee]
     $scope.tiles = []; // Items in tile section [{},{}]
@@ -26,12 +28,15 @@ app.controller("CompanyController", function ($scope, PageData) {
     $scope.loadTiles = function(section) {
         // Retrieve tile data
         $scope.tiles = [];
-        let url = PageData.getServer() + "?purpose=tiles&amp;section=" + section + "&amp;cname=" +
-            $scope.company.name + "&amp;caux" + $scope.company.aux;
+        let url = PageData.getServer() + "?purpose=tiles&amp;section=" + section + "&amp;tname=" +
+            $scope.tower.name + "&amp;taux" + $scope.tower.aux;
         $http.jsonp(url).then(function (response) {
             $scope.tiles = response.data;
         }, function (response) {
             switch (section) {
+                case 'Company':
+                    $scope.tiles = [{name:'Dynamic', aux:'1500'},{name:'Static', aux:'650'}, {name:'Tesla', aux:'1485'}];
+                    break;
                 case 'Event':
                     $scope.tiles = [{name:'ThermoDynamic', aux:'Dynamic'}];
                     break;
@@ -74,10 +79,10 @@ app.controller("CompanyController", function ($scope, PageData) {
         let section = "section=" + $scope.selection[index].section;
         let name = "name=" + tile.name;
         let aux = "aux=" + tile.aux;
-        let cname = "cname=" + $scope.company.name;
-        let caux = "caux=" + $scope.company.aux;
+        let tname = "tname=" + $scope.tower.name;
+        let taux = "taux=" + $scope.tower.aux;
         let url = "?" + purpose + "&amp;" + section + "&amp;" + name + "&amp;" + aux + "&amp;" +
-            cname + "&amp;" + caux;
+            tname + "&amp;" + taux;
         url = encodeURI(url); // Sanitize String
         // Get bubble data
         $http.jsonp(url).then(function (response) {
@@ -108,6 +113,14 @@ app.controller("CompanyController", function ($scope, PageData) {
     };  // click function from footer
     $scope.linkPage = function(section, choice) {
         switch(section) {
+            case "Company":
+                // Store relevant data
+                PageData.setCompany({name: choice, aux: $scope.currentChoice.Reception});
+
+                // Use $location to open new page
+                $location.path('/company');
+                $location.apply();
+                break;
             case "Event":
                 PageData.setEvent({name: choice, aux: $scope.currentChoice.Host});
 

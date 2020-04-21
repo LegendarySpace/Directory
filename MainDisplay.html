@@ -5,6 +5,7 @@
             <span ng-hide="edit.target === type" ng-switch="type">
                 <span ng-switch-when="message" class="title">{{ text }}</span>
                 <span ng-switch-when="name" class="title">{{ text }}</span>
+                <span ng-switch-when="img"></span><!-- Hide img -->
                 <span ng-switch-default>{{ text }}</span>
                 <span ng-show="admin" ng-click="edit.target = type; edit.value = text">&#9998;</span>
             </span>
@@ -29,8 +30,7 @@
                 <h3>{{tile.name}}</h3>
                 <h4>{{tile.aux}}</h4>
             </div>
-            <!-- TODO Don't display if tower or company -->
-            <div ng-if="true" class="displayTile" ng-click="newTile(currentSection)">
+            <div ng-if="admin && currentSection !== 'Tower' && currentSection !== 'Company'" class="displayTile" ng-click="newTile(currentSection)">
                 <img src="Images/plus.png" />
             </div>
         </div>

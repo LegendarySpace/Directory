@@ -86,6 +86,7 @@
             // Open connection to database
             $conn = new mysqli($servername, $username, $password, $dbname);
             if($conn->connect_error) {
+                sendError("Error connecting to SQL: ".$conn->connect_error);
                 die("Connection Failed: " . $conn->connect_error);
             }
             
@@ -100,7 +101,7 @@
                             $content = array("username"=>'',"password"=>'');
                             break;
                         case 'register':
-                            $main = array("first name"=>null,"last name"=>null,"username"=>null,"password"=>null,"type"=>null);
+                            $main = array("first name"=>null,"last name"=>null,"username"=>null,"password"=>null);
                             $tower = array("name"=>null,"location"=>null,"management company"=>null,"number"=>null,"email"=>null,"image"=>null,"details"=>null);
                             $company = array("name"=>null,"suite"=>array(),"reception"=>null,"number"=>null,"email"=>null,"slogan"=>null,"image"=>null,"details"=>null);
                             $content = array('main'=>$main,'tower'=>$tower,'company'=>$company);
@@ -200,7 +201,7 @@
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
-                                    array_push($tileArray, array('name'=>$row['Name'], 'aux'=>['Reception']));
+                                    array_push($tileArray, array('name'=>$row['Name'], 'aux'=>$row['Reception']));
                                 }
                             }
                             break;
@@ -215,7 +216,7 @@
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
-                                    array_push($tileArray, array('name'=>$row['Name'], 'aux'=>['Host']));
+                                    array_push($tileArray, array('name'=>$row['Name'], 'aux'=>$row['Host']));
                                 }
                             }
                             break;
@@ -242,7 +243,7 @@
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
-                                    array_push($tileArray, array('name'=>"{$row['FirstName']} {$row['LastName']}", 'aux'=>['Title']));
+                                    array_push($tileArray, array('name'=>"{$row['FirstName']} {$row['LastName']}", 'aux'=>$row['Title']));
                                 }
                             }
                             break;
@@ -374,9 +375,13 @@
             $item = $_POST['item'];
 
             switch($purpose) {
+                case 'Login':
+                    // Should set the session id if successful
+                    break;
                 case 'Create':
                     switch ($item) {
                         case 'user':
+                            // Register destination
                             break;
                         case 'tower':
                             break;

@@ -90,14 +90,16 @@
     position: relative;
     background-color: white;
     max-width: fit-content;
+    padding: 1em;
+    left: 35%;
+    top: 2em;
 }
 
 .modal .head {
     position: relative;
     background-color: blanchedalmond;
-    max-width: fit-content;
     text-align: center;
-    vertical-align: center;
+    font-size: x-large;
 }
 
 .splash {

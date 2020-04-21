@@ -5,18 +5,18 @@ var app = angular.module("Directory", ["ngAnimate", "ngRoute"]);
 app.config(function($routeProvider){
     $routeProvider
     .when("/", {
-        templateUrl : 'LandingPage.html',
-        controller : 'LandingController'
+        templateUrl : 'MainDisplay.html',
+        controller : 'LandingCtrl'
     })
     .when("/tower", {
         // Only switch controller, pages had only minor differences
-        templateUrl : 'LandingPage.html',
-        controller : 'TowerController'
+        templateUrl : 'MainDisplay.html',
+        controller : 'TowerCtrl'
     })
     .when("/company", {
         // TODO Setup company controller to function on landing page also
-        templateUrl : "CompanyPage.html",
-        controller : "CompanyController"
+        templateUrl : "MainDisplay.html",
+        controller : "CompanyCtrl"
     })
     .otherwise({
         redirectTo : '/'
@@ -24,6 +24,7 @@ app.config(function($routeProvider){
 });
 
 /* Filters */
+/* legacy filters. no longer have access to info
 app.filter('filterByTower', function () {
     return function (x, selected) {
         if (selected === null || !angular.isDefined(selected) || x.length < 1) { return x; }
@@ -43,16 +44,16 @@ app.filter('filterByCompany', function () {
         });
         return filtered;
     };
-});
-app.filter('excludeHidden', function () {
-    return function (x) {
-        if (x.length < 1) { return x; }
+}); */
+// new filter that accepts tower and company, filtering first by tower then company
+app.filter('tandc', function () {
+    return function (inputArray, tower, company) {
         let filtered = [];
-        for (key in x) {
-            if (key !== 'accountID' && key !== 'img') { filtered.push(x); }
-        }
-        return filtered;
-    };
+        inputArray.forEach(function(item) {
+            // if tower is set check for tower
+            // if company is set check for company
+        });
+    }
 });
 app.filter('capitalize', function() {
     return function(input) {
@@ -117,46 +118,4 @@ app.factory('PageData', function () {
 
 app.controller("FrameController", function ($scope, $http, PageData) {
     $scope.login = {display: false};
-
-});
-
-app.controller("LoginController", function ($scope, $http, PageData) {
-    $scope.login.content = null;
-    $scope.register = {display: false, type:null};
-
-    $scope.getModal = function () {
-        $scope.login.content = {};
-        let url = PageData.getServer + 'purpose=form&context=';
-        url += ($scope.register.display)? 'register':'login';
-        $http.jsonp(url).then(function (response) {
-            $scope.login.content = response.data;
-        }, function (response) {
-            $scope.login.content = (!$scope.register.display)?{username: '', password: ''}
-            :{main:{user:'',pass:'',type:null},tower:{},company:{}};
-        });
-        if($scope.register.display) {
-            $scope.register.tower = $scope.login.content.tower;
-            $scope.register.company = $scope.login.content.company;
-            $scope.login.content = $scope.login.main;
-        }
-    };
-
-
-// GET content for login
-    $scope.getModal();
-});
-
-app.controller("FormController", function($scope, $http, PageData) {
-    $scope.form = PageData.getForm();
-    // if form.empty() close modal
-    if ($scope.form.content.empty()) $scope.form.display = false;
-    $scope.sendForm = function() {
-        let url = PageData.getServer + 'purpose=create&item=' + $scope.form.type;
-        $http.post(url, JSON.stringify($scope.form.content)).then(function (response) {
-            // submitted successfully
-            $scope.form.display = false;
-        }, function (response) {
-            // failed to submit
-        });
-    };
 });

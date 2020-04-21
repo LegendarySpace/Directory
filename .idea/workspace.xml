@@ -2,13 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="14a2288f-cb27-425a-bc37-05306fe19a89" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/FormCtrl.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LoginCtrl.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CompanyJS.js" beforeDir="false" afterPath="$PROJECT_DIR$/CompanyCtrl.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CompanyPage.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/DirectoryCSS.css" beforeDir="false" afterPath="$PROJECT_DIR$/DirectoryCSS.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frame.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LandingJS.js" beforeDir="false" afterPath="$PROJECT_DIR$/LandingJS.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LandingPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/LandingPage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LandingJS.js" beforeDir="false" afterPath="$PROJECT_DIR$/LandingCtrl.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LandingPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/MainDisplay.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Responder.php" beforeDir="false" afterPath="$PROJECT_DIR$/Responder.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ServiceModule.js" beforeDir="false" afterPath="$PROJECT_DIR$/ServiceModule.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TowerJS.js" beforeDir="false" afterPath="$PROJECT_DIR$/TowerCtrl.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TowerPage.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/login.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +46,7 @@
       <list>
         <option value="HTTP Request" />
         <option value="HTML File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -55,7 +63,6 @@
   <component name="ProjectId" id="1aGwVUAX56BtwkGzgPY7176iw31" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
@@ -64,7 +71,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="D:/Program Files/PHP/php.exe" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../Program Files/PHP/php.exe" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -72,11 +79,67 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="JavaScript.Libraries" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RestClientSettings">
     <option name="REQUEST_HISTORY">
       <list>
+        <RestClientRequest>
+          <option name="httpMethod" value="GET" />
+          <option name="urlBase" value="http://fauxdirectory.rf.gd/Responder.php" />
+          <option name="urlPath" value="" />
+          <option name="headers">
+            <list>
+              <KeyValuePair>
+                <option name="key" value="Accept" />
+                <option name="value" value="application/json" />
+              </KeyValuePair>
+            </list>
+          </option>
+          <option name="parameters">
+            <list>
+              <KeyValuePair>
+                <option name="key" value="purpose" />
+                <option name="value" value="form" />
+              </KeyValuePair>
+              <KeyValuePair>
+                <option name="key" value="context" />
+                <option name="value" value="register" />
+              </KeyValuePair>
+            </list>
+          </option>
+          <option name="parametersEnabled" value="true" />
+          <option name="textToSend" value="" />
+          <option name="filesToSend" value="" />
+        </RestClientRequest>
+        <RestClientRequest>
+          <option name="httpMethod" value="GET" />
+          <option name="urlBase" value="http://fauxdirectory.rf.gd/Responder.php" />
+          <option name="urlPath" value="" />
+          <option name="headers">
+            <list>
+              <KeyValuePair>
+                <option name="key" value="Accept" />
+                <option name="value" value="application/json" />
+              </KeyValuePair>
+            </list>
+          </option>
+          <option name="parameters">
+            <list>
+              <KeyValuePair>
+                <option name="key" value="purpose" />
+                <option name="value" value="tiles" />
+              </KeyValuePair>
+              <KeyValuePair>
+                <option name="key" value="section" />
+                <option name="value" value="event" />
+              </KeyValuePair>
+            </list>
+          </option>
+          <option name="parametersEnabled" value="true" />
+          <option name="textToSend" value="" />
+          <option name="filesToSend" value="" />
+        </RestClientRequest>
         <RestClientRequest>
           <option name="httpMethod" value="GET" />
           <option name="urlBase" value="http://fauxdirectory.rf.gd/Responder.php" />
@@ -181,7 +244,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="HTTP Request.All in AttemptGET">
+  <component name="RunManager" selected="HTTP Request.AttemptGET#2">
     <configuration name="All in AttemptGET" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" path="$PROJECT_DIR$/AttemptGET.http">
       <method v="2" />
     </configuration>
@@ -199,9 +262,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="HTTP Request.All in AttemptGET" />
-        <item itemvalue="HTTP Request.AttemptGET#1" />
         <item itemvalue="HTTP Request.AttemptGET#2" />
+        <item itemvalue="HTTP Request.AttemptGET#1" />
+        <item itemvalue="HTTP Request.All in AttemptGET" />
         <item itemvalue="HTTP Request.Attempt GET#1" />
       </list>
     </recent_temporary>
@@ -222,12 +285,13 @@
       <workItem from="1586720346964" duration="22626000" />
       <workItem from="1586898830130" duration="41120000" />
       <workItem from="1587105809400" duration="4194000" />
-      <workItem from="1587111917893" duration="42648000" />
+      <workItem from="1587111917893" duration="47652000" />
+      <workItem from="1587440992426" duration="10635000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
     <state x="540" y="174" key="#CLI_Interpreters" timestamp="1586666411327">
@@ -266,26 +330,26 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1586666379867" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1587245677460">
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1587449076404">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1587245677460" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1587245677460">
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1587449076404" />
+    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1587449076404">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1587245677460" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1587245677459">
+    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1587449076404" />
+    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1587449076404">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1587245677459" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1587245677460">
+    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1587449076404" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1587449076404">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1587245677460" />
-    <state x="691" y="257" key="SettingsEditor" timestamp="1586534845424">
+    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1587449076404" />
+    <state x="427" y="179" key="SettingsEditor" timestamp="1587441240117">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="691" y="257" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1586534845424" />
+    <state x="427" y="179" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1587441240117" />
     <state x="821" y="417" key="WebDeployment.AddServerDialog.v.1" timestamp="1586665778671">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

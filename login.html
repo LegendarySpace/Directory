@@ -2,18 +2,21 @@
 <div class="modal" ng-controller="LoginController">
     <div class="cont">
         <div class="head">
-            <img src="Images/FoxFLogo.png" style="max-height: 5em">
+            <img src="Images/FoxFLogo.png" style="max-height: 3em"><br>
             <span class="title">Faux Directory</span>
         </div>
+        <hr>
         <div ng-repeat="(x,y) in login.content">
             <label>{{x|capitalize}}:</label>
             <input type="text" ng-required>
         </div>
         <div ng-if="register.display">
-            <select ng-model="register.type">
-                <option value="tower">Tower</option>
-                <option value="company">Company</option>
-            </select>
+            <label>
+                <select ng-model="register.type">
+                    <option value="tower">Tower</option>
+                    <option value="company">Company</option>
+                </select>
+            </label>
             <div ng-if="register.type === 'tower'">
                 <div ng-repeat="(x,y) in register.tower" ng-switch="x">
                     <label>{{x|capitalize}}:</label>
@@ -29,15 +32,16 @@
                     <input ng-switch-when="number" type="tel" ng-model="register.company[x]">
                     <input ng-switch-when="email" type="email" ng-model="register.company[x]">
                     <input ng-switch-when="image" type="image" ng-model="register.company[x]">
-                    <div ng-switch-when="suite"><!-- array of numbers -->
+                    <span ng-switch-when="reception">{{ register.company.reception }}</span><!-- skip reception -->
+                    <span ng-switch-when="suite"><!-- array of numbers -->
                         <div ng-repeat="value in y">
-                            <input type="number" ng-model="value">
+                            <!-- value is not setting in y because it's primitive. Use index of y -->
+                            <input type="number" ng-model="y[$index]">
                             <input type="radio" ng-model="register.company.reception" ng-value="value">
                             <span ng-click="remove">x</span>
                         </div>
                         <div ng-click="y.push(0)">Add another</div>
-                        <div>Reception area is {{register.company.reception}}</div>
-                    </div>
+                    </span>
                     <input ng-switch-default type="text" ng-model="register.company[x]">
                 </div>
             </div>

@@ -1,7 +1,5 @@
 
-app.controller("LandingController", function($scope, $http, $location, PageData) {
-    // !IMPORTANT! Use &amp; instead of & to avoid &sect miscall
-    // TODO Set Mime type correctly
+app.controller("LandingCtrl", function($scope, $http, $location, PageData) {
     $http.jsonp(PageData.getServer + 'purpose=splash&page=landing')
         .then(function (response) {
             // response.data = [splash[], sections[], admin]
@@ -26,10 +24,13 @@ app.controller("LandingController", function($scope, $http, $location, PageData)
 
     $scope.loadTiles = function(section) {
         // Retrieve tile data
+        // TODO after looking up a tile set store it so the call isn't repeated incessantly
+        // if(!$scope.tile[section]) server call
+        // else $scope.tiles = $scope.tile[section]
         $scope.tiles = [];
-        $http.jsonp(PageData.getServer + 'purpose=tiles&section=' + section)
+        $http.jsonp(PageData.getServer + 'purpose=tiles&section=' + section.toLowerCase())
             .then(function (response) {
-                $scope.tiles = response.data;
+                $scope.tiles = response.data.tiles;
             }, function (response) {
                 switch (section) {
                     case 'Tower':
@@ -65,6 +66,7 @@ app.controller("LandingController", function($scope, $http, $location, PageData)
             $scope.loadTiles(tile.section);
         }
         $scope.currentChoice = {name: tile.choice};
+        tile.choice = null;
     }; // click function from Selected
     $scope.chooseTile = function(tile) {
 
@@ -74,14 +76,14 @@ app.controller("LandingController", function($scope, $http, $location, PageData)
 
         // Generate URL to retrieve bubble data
         let purpose = "purpose=bubble";
-        let section = "section=" + $scope.selection[index].section;
+        let section = "section=" + $scope.selection[index].section.toLowerCase();
         let name = "name=" + tile.name;
         let aux = "aux=" + tile.aux;
         let url = PageData.getServer + purpose + '&' + section + '&' + name + '&' + aux;
         url = encodeURI(url); // Sanitize String
         // Get bubble data
         $http.jsonp(url).then(function (response) {
-            $scope.currentChoice = response.data;
+            $scope.currentChoice = response.data.bubble;
         }, function (response) {
             $scope.currentChoice = {'name': tile.name, 'aux': tile.aux};
         });
