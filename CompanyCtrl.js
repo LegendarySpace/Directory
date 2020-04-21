@@ -2,14 +2,13 @@
 app.controller("CompanyCtrl", function ($scope, $http, $location, PageData) {
     // On failure return to main page
     $scope.company = PageData.getCompany();
-    if($scope.company.name === '') $location.path('/');
-    if($scope.company.name === '') $scope.company = {name: 'Anonymous Tower', aux: 'an address', img: 'Images/DynamicLogo.jpg'};
-    $http.jsonp(PageData.getServer + "purpose=splash&page=company&name="+$scope.company.name+"&aux="+$scope.company.aux)
+    if(!$scope.company) $location.path('');
+    $http.jsonp(PageData.getServer + "purpose=splash&page=company&id="+$scope.company)
         .then(function (response) {
             // response.data = [splash[], sections[], admin]
             $scope.sections = response.data.sections;
             $scope.splash = response.data.splash;
-            $scope.splash.admin = response.data.splash;
+            $scope.splash.admin = response.data.admin;
             $scope.background = ($scope.splash.img)? 'Images/'+$scope.splash.img: 'Images/DynamicLogo.jpg';
         }, function (response) {
             $scope.sections = ["Event", "Employee"];
@@ -28,8 +27,7 @@ app.controller("CompanyCtrl", function ($scope, $http, $location, PageData) {
     $scope.loadTiles = function(section) {
         // Retrieve tile data
         $scope.tiles = [];
-        let url = PageData.getServer + "purpose=tiles&section=" + section.toLowerCase() + "&cname=" +
-            $scope.company.name + "&caux" + $scope.company.aux;
+        let url = PageData.getServer + "purpose=tiles&section=" + section.toLowerCase() + "&company="+$scope.company;
         $http.jsonp(url).then(function (response) {
             $scope.tiles = response.data.tiles;
         }, function (response) {
@@ -76,11 +74,9 @@ app.controller("CompanyCtrl", function ($scope, $http, $location, PageData) {
         // Generate URL to retrieve bubble data
         let purpose = "purpose=bubble";
         let section = "section=" + $scope.selection[index].section.toLowerCase();
-        let name = "name=" + tile.name;
-        let aux = "aux=" + tile.aux;
-        let cname = "cname=" + $scope.company.name;
-        let caux = "caux=" + $scope.company.aux;
-        let url = PageData.getServer + purpose + "&" + section + "&" + name + "&" + aux + "&" + cname + "&" + caux;
+        let id = "id=" + tile.id;
+        let company = "company=" + $scope.company;
+        let url = PageData.getServer + purpose + "&" + section + "&" + id + '&' + company;
         url = encodeURI(url); // Sanitize String
         // Get bubble data
         $http.jsonp(url).then(function (response) {
@@ -112,12 +108,12 @@ app.controller("CompanyCtrl", function ($scope, $http, $location, PageData) {
     $scope.linkPage = function(section, choice) {
         switch(section) {
             case "Event":
-                PageData.setEvent({name: $scope.currentChoice.name, aux: $scope.currentChoice.host || $scope.currentChoice.aux});
+                PageData.setEvent($scope.currentChoice.id);
 
                 $location.path('/event');
                 break;
             case "Employee":
-                PageData.setEmployee({name: $scope.currentChoice.name, aux: $scope.currentChoice.title || $scope.currentChoice.aux});
+                PageData.setEmployee($scope.currentChoice.id);
 
                 $location.path('/company#employee');
                 break;

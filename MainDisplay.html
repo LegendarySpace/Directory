@@ -37,7 +37,10 @@
         </div>
         <div class="bubble" ng-hide="sDisplay !== 'Bubble'">
             <!-- TODO If section = event or employee allow editing. Editing should deploy the create modal filled out -->
-            <div ng-repeat="(x,y) in currentChoice">{{x | capitalize}}: {{y}}</div>
+            <div ng-repeat="(x,y) in currentChoice" ng-switch="x">
+                <span ng-switch-when="id"></span><!-- Hide id -->
+                <span ng-switch-default>{{x | capitalize}}: {{y}}</span>
+            </div>
             <div><span class="link" ng-click="linkPage(currentSection)">Go To {{currentSection}} Page</span></div>
         </div>
 

@@ -89,6 +89,7 @@
                 sendError("Error connecting to SQL: ".$conn->connect_error);
                 die("Connection Failed: " . $conn->connect_error);
             }
+            if (isset($_GET['id'])) $id = $_GET['id'];
             
             switch ($purpose) {
                 case 'form':
@@ -121,8 +122,6 @@
                 case 'splash':
                     // Set universal variables
                     $page = $_GET['page'];
-                    $name = $_GET['name'];
-                    $aux = $_GET['aux'];
                     $splashArray = $sectionsArray = $admin = null;
                     $admin = false;
                     // if logged in retrieve id
@@ -137,27 +136,26 @@
                             $sectionsArray = array('Tower', 'Event');
                             break;
                         case 'tower':
-                            $sql = "SELECT * FROM Towers WHERE Name='{$name}' AND Location='{$aux}'";
+                            $sql = "SELECT * FROM Towers WHERE AccountID='{$id}'";
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
                                 // Only grab the first item, assign items to $splashArray
                                 $row = $result->fetch_assoc();
 	                            // $admin = $_SESSION['userID'] === $row['AdminID'];
-                                $splashArray = array('name'=>$name, 'location'=>$aux, 'manage'=>$row['ManagementCompany'],
+                                $splashArray = array('name'=>$row['Name'], 'location'=>$row['Location'], 'manage'=>$row['ManagementCompany'],
                                     'phone'=>$row['ManagementContact'], 'email'=>$row['ManagementContactEmail'],
                                     'details'=>$row['Details'], 'img'=>$row['ImageURL']);
                             }
                             $sectionsArray = array('Company', 'Event', 'Employee');
                             break;
                         case 'company':
-                            // May change aux to towerName
-	                        $sql = "SELECT * FROM Companies WHERE Name='{$name}' AND Reception='{$aux}'";
+                            $sql = "SELECT * FROM Companies WHERE AccountID='{$id}'";
 	                        $result = $conn->query($sql);
 	                        if($result->num_rows > 0) {
 	                            // Only grab the first item, assign items to $splashArray
 	                            $row = $result->fetch_assoc();
 	                            // $admin = $_SESSION['userID'] === $row['AdminID'];
-	                            $splashArray = array('name'=>$name, 'suite'=>$row['Suite'], 'reception'=>$aux,
+	                            $splashArray = array('name'=>$row['Name'], 'suite'=>$row['Suite'], 'reception'=>$row['Reception'],
 	                                'phone'=>$row['ContactNumber'], 'email'=>$row['ContactEmail'], 'slogan'=>$row['Slogan'],
 	                                'details'=>$row['Details'], 'img'=>$row['ImageURL']);
 	                        }
@@ -167,7 +165,7 @@
                     }
                     //  if any are empty send error
                     if (empty($splashArray) || empty($sectionsArray) || $admin === null) sendError("Error Loading Splash");
-                    else sendData(array('splash'=>$splashArray, 'sections'=>$sectionsArray, 'admin'=>$admin));
+                    else sendData(array('splash'=>$splashArray, 'sections'=>$sectionsArray, 'admin'=>false));
                     break;
 
                 case 'tiles':
@@ -176,47 +174,44 @@
                     $tileArray = array();
                     $additional = null;
                     // Get IDs if set, can be null
-                    $tower = (!empty($_GET['tname']))?array('name'=>$_GET['tname'], 'aux'=>$_GET['taux'], 'id'=>null):null;
-                    if(!empty($tower)) getID($tower, $conn, 'Towers');
-                    $company = (!empty($_GET['cname']))?array('name'=>$_GET['cname'], 'aux'=>$_GET['caux'], 'id'=>null):null;
-                    if(!empty($company)) getID($company, $conn, 'Companies');
+                    $tower = (!empty($_GET['tower']))? $_GET['tower']: null;
+                    $company = (!empty($_GET['company']))? $_GET['company']: null;
 
                     // switch through section
                     switch ($section) {
                         case 'tower':
-                            $sql = 'SELECT Name, Location FROM Towers';
+                            $sql = 'SELECT AccountID, Name, Location FROM Towers';
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
                                 while ($row= $result->fetch_assoc()) {
-                                    array_push($tileArray, array('name'=>$row['Name'],'aux'=>$row['Location']));
+                                    array_push($tileArray, array('name'=>$row['Name'],'aux'=>$row['Location'],'id'=>$row['AccountID']));
                                 }
                             }
                             break;
                         case 'company':
-                            // if !empty(towerName) set $additional to 'TowerID=$towerid'
-                            if(hasID($tower)) $additional = "Tower='{$tower['id']}'";
+                            if($id) $additional = "TowerID='{$id}'";
 
-                            $sql = 'SELECT Name, Reception FROM Companies';
-                            if (!empty($additional)) $sql = "{$sql} WHERE {$additional}";
+                            $sql = 'SELECT AccountID, Name, Reception FROM Companies';
+                            if ($additional) $sql = "{$sql} WHERE {$additional}";
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
-                                    array_push($tileArray, array('name'=>$row['Name'], 'aux'=>$row['Reception']));
+                                    array_push($tileArray, array('name'=>$row['Name'], 'aux'=>$row['Reception'],'id'=>$row['AccountID']));
                                 }
                             }
                             break;
                         case 'event':
                             // if !empty(towerName) set $additional to 'TowerID=$towerid'
                             // if !empty(companyName) if !empty($additional) use $additional with %companyid, set $additional to 'CompanyID=$companyid'
-                            if(hasID($tower)) $additional = "TowerID='{$tower['id']}'";
-                            if(hasID($company)) $additional = (empty($additional))? "CompanyID='{$company['id']}'": "{$additional} AND CompanyID='{$company['id']}'";
+                            if($tower) $additional = "TowerID='{$tower}'";
+                            if($company) $additional = (empty($additional))? "CompanyID='{$company}'": "{$additional} AND CompanyID='{$company}'";
 
-                            $sql = 'SELECT Name, Host FROM Events';
+                            $sql = "SELECT AccountID, Name, Host FROM Events WHERE AccountID={$id}";
                             if(!empty($additional)) $sql = "{$sql} WHERE {$additional}";
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
-                                    array_push($tileArray, array('name'=>$row['Name'], 'aux'=>$row['Host']));
+                                    array_push($tileArray, array('name'=>$row['Name'], 'aux'=>$row['Host'],'id'=>$row['AccountID']));
                                 }
                             }
                             break;
@@ -224,10 +219,10 @@
                             // $tower and $company are mutually exclusive
                             // if !empty(companyName) set $additional to 'CompanyID=$companyid'
                             // if !empty(towerName) set $additional to each company with 'TowerID=$towerid'
-                            if (hasID($company)) $additional = "CompanyID='{$company['id']}'";
-                            elseif (hasID($tower)) {
+                            if ($company) $additional = "CompanyID='{$company}'";
+                            elseif ($tower) {
                                 // For loop through companies adding them to additional
-                                $query = "SELECT AccountID FROM Companies WHERE TowerID='{$tower['id']}'";
+                                $query = "SELECT AccountID FROM Companies WHERE TowerID='{$tower}'";
                                 $res = $conn->query($query);
                                 if($res->num_rows > 0) {
                                     // Set additional to contain all companies
@@ -238,12 +233,12 @@
                             }
 
                             // TODO Employees needs to be public to view unless by admin
-                            $sql = "SELECT FirstName, LastName, Title FROM Employees WHERE Public=true";
+                            $sql = "SELECT AccountID, FirstName, LastName, Title FROM Employees WHERE Public=true";
                             if(!empty($additional)) $sql = "{$sql} AND ({$additional})";
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
-                                    array_push($tileArray, array('name'=>"{$row['FirstName']} {$row['LastName']}", 'aux'=>$row['Title']));
+                                    array_push($tileArray, array('name'=>"{$row['FirstName']} {$row['LastName']}", 'aux'=>$row['Title'],'id'=>$row['AccountID']));
                                 }
                             }
                             break;
@@ -261,64 +256,57 @@
                     $section = $_GET['section'];
                     $tileArray = array();
                     $additional = $bubbleArray = null;
-                    $selObj = array('name'=>$_GET['name'],'aux'=>$_GET['aux'], 'id'=>null);
+                    $selObj = $_GET['id'];
                     // Get IDs if set
-                    $tower = (!empty($_GET['tname']))?array('name'=>$_GET['tname'], 'aux'=>$_GET['taux'], 'id'=>null):null;
-                    if(!empty($tower)) getID($tower, $conn, 'Towers');
-                    $company = (!empty($_GET['cname']))?array('name'=>$_GET['cname'], 'aux'=>$_GET['caux'], 'id'=>null):null;
-                    if(!empty($company)) getID($company, $conn, 'Companies');
+                    $tower = (!empty($_GET['tower']))? $_GET['tower']: null;
+                    $company = (!empty($_GET['company']))? $_GET['company']: null;
 
                     // switch through section
                     switch ($section) {
                         case 'tower':
-                            // Get ObjID and use it to gather details
-                            getID($selObj, $conn, 'Towers');
-                            $sql = "SELECT * FROM Towers WHERE Name='{$selObj['name']}' AND Location='{$selObj['aux']}'";
-                            if (!empty($selObj['id'])) $sql = "{$sql} AND AccountID='{$selObj['id']}'";
+                            $sql = "SELECT * FROM Towers WHERE AccountID='{$selObj}'";
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
                                 $row= $result->fetch_assoc();
                                 $bubbleArray = array('name'=>$row['Name'],'location'=>$row['Location'],
                                     'management'=>$row['ManagementCompany'],'contact number'=>$row['ManagementContact'],
-                                    'contact email'=>$row['ManagementContactEmail'], 'details'=>$row['Details']);
+                                    'contact email'=>$row['ManagementContactEmail'], 'details'=>$row['Details'], 'id'=>$row['AccountID']);
                             }
                             break;
                         case 'company':
                             // if there's tower data use it to get company
-                            if(hasID($tower)) $additional = "TowerID='{$tower['id']}'";
-                            else getID($selObj, $conn, 'Companies');
+                            if($tower) $additional = "TowerID='{$tower}'";
 
-                            $sql = "SELECT * FROM Companies WHERE Name='{$selObj['name']}' AND Reception='{$selObj['aux']}' AND";
-                            $sql = (hasID($tower))? "{$sql} {$additional}": "{$sql} AccountID='{$selObj['id']}'";
+                            $sql = "SELECT * FROM Companies WHERE AccountID='{$selObj}'";
+                            if($additional) $sql += " AND {$additional}";
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
                                 $row = $result->fetch_assoc();
                                 $bubbleArray = array('name'=>$row['Name'], 'slogan'=>$row['Slogan'], 'suites'=>$row['Suite'],
                                     'reception'=>$row['Reception'], 'phone'=>$row['ContactNumber'],
-                                    'email'=>$row['ContactEmail'], 'details'=>$row['Details']);
+                                    'email'=>$row['ContactEmail'], 'details'=>$row['Details'], 'id'=>$row['AccountID']);
                             }
                             break;
                         case 'event':
                             // if tower/company data exist use it to get event
-                            if(hasID($tower)) $additional = "TowerID='{$tower['id']}'";
-                            if(hasID($company)) $additional = (empty($additional))? "CompanyID='{$company['id']}'": "{$additional} AND CompanyID='{$company['id']}'";
-                            if(empty($additional)) getID($selObj, $conn, 'Events');
+                            if($tower) $additional = "TowerID='{$tower}'";
+                            if($company) $additional = (empty($additional))? "CompanyID='{$company}'": "{$additional} AND CompanyID='{$company}'";
 
-                            $sql = "SELECT * FROM Events WHERE Name='{$selObj['name']}' AND Host='{$selObj['aux']}' AND";
-                            $sql = (empty($additional))? "{$sql} AccountID='{$selObj['id']}'": "{$sql} {$additional}";
+                            $sql = "SELECT * FROM Events WHERE AccountID='{$selObj}'";
+                            if($additional) $sql += " AND {$additional}";
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
                                 $row = $result->fetch_assoc();
                                 $bubbleArray = array('name'=>$row['Name'], 'slogan'=>$row['Slogan'], 'host'=>$row['Host'],
-                                    'location'=>$row['Location'], 'details'=>$row['Details']);
+                                    'location'=>$row['Location'], 'details'=>$row['Details'], 'id'=>$row['AccountID']);
                             }
                             break;
                         case 'employee':
                             // if tower/company data exist use it to get employee
-                            if(hasID($company)) $additional = "CompanyID='{$company['id']}'";
-                            elseif (hasID($tower)) {
+                            if($company) $additional = "CompanyID='{$company}'";
+                            elseif ($tower) {
                                 // For loop through companies adding them to additional
-                                $query = "SELECT AccountID FROM Companies WHERE TowerID='{$tower['id']}'";
+                                $query = "SELECT AccountID FROM Companies WHERE TowerID='{$tower}'";
                                 $res = $conn->query($query);
                                 if($res->num_rows > 0) {
                                     // Set additional to contain all companies
@@ -327,18 +315,15 @@
                                     }
                                 }
                             }
-                            if(empty($additional)) getID($selObj, $conn, 'Employees');
 
-                            // Name does not exist in employee, split name into first and last
-                            $name = preg_split("/[\s]+/", $selObj['name']);
-                            $sql = "SELECT * FROM Employees WHERE FirstName='{$name[0]}' AND LastName='{$name[1]}' AND Title='{$selObj['aux']}' AND";
-                            $sql = (empty($additional))? "{$sql} AccountID='{$selObj['id']}'": "{$sql} {$additional}";
+                            $sql = "SELECT * FROM Employees WHERE AccountID='{$selObj}'";
+                            if($additional) $sql += " AND {$additional}";
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
                                 $row = $result->fetch_assoc();
                                 if($row['Public']) {
                                     $bubbleArray = array('first name' => $row['FirstName'], 'last name' => $row['LastName'],
-                                        'title' => $row['Title'], 'phone' => $row['Phone'], 'email' => $row['Email']);
+                                        'title' => $row['Title'], 'phone' => $row['Phone'], 'email' => $row['Email'], 'id'=>$row['AccountID']);
                                 }
                             }
                             break;

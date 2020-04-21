@@ -76,9 +76,8 @@ app.controller("LandingCtrl", function($scope, $http, $location, PageData) {
         // Generate URL to retrieve bubble data
         let purpose = "purpose=bubble";
         let section = "section=" + $scope.selection[index].section.toLowerCase();
-        let name = "name=" + tile.name;
-        let aux = "aux=" + tile.aux;
-        let url = PageData.getServer + purpose + '&' + section + '&' + name + '&' + aux;
+        let id = "id=" + tile.id;
+        let url = PageData.getServer + purpose + '&' + section + '&' + id;
         url = encodeURI(url); // Sanitize String
         // Get bubble data
         $http.jsonp(url).then(function (response) {
@@ -111,14 +110,14 @@ app.controller("LandingCtrl", function($scope, $http, $location, PageData) {
         switch (section) {
             case "Tower":
                 // Store relevant data
-                PageData.setTower({name: $scope.currentChoice.name, aux: $scope.currentChoice.location || $scope.currentChoice.aux});
+                PageData.setTower($scope.currentChoice.id);
 
                 // Use $location to open new page
                 $location.path('/tower');
                 break;
             case "Event":
                 // Store relevant data
-                PageData.setEvent({name: $scope.currentChoice.name, aux: $scope.currentChoice.host || $scope.currentChoice.aux});
+                PageData.setEvent($scope.currentChoice.id);
 
                 // Use $location to open new page
                 $location.path('/event');

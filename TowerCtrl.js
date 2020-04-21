@@ -2,13 +2,13 @@
 app.controller("TowerCtrl", function ($scope, $http, $location, PageData) {
     // On failure to load should return to main page
     $scope.tower = PageData.getTower();
-    if($scope.tower.name === '') $location.path('/');
-    $http.jsonp(PageData.getServer + "purpose=splash&page=tower&name="+$scope.tower.name+"&aux="+$scope.tower.aux)
+    if(!$scope.tower) $location.path('/');
+    $http.jsonp(PageData.getServer + "purpose=splash&page=tower&id="+$scope.tower)
         .then(function (response) {
             // response.data = [splash[], sections[], admin]
             $scope.sections = response.data.sections;
             $scope.splash = response.data.splash;
-            $scope.splash.admin = response.data.splash;
+            $scope.splash.admin = response.data.admin;
             $scope.background = ($scope.splash.img)? 'Images/'+$scope.splash.img: 'Images/Tower1.jpg';
         }, function (response) {
             $scope.sections = ["Company", "Event", "Employee"];
@@ -27,17 +27,16 @@ app.controller("TowerCtrl", function ($scope, $http, $location, PageData) {
     $scope.loadTiles = function(section) {
         // Retrieve tile data
         $scope.tiles = [];
-        let url = PageData.getServer + "?purpose=tiles&section=" + section.toLowerCase() + "&tname=" +
-            $scope.tower.name + "&taux" + $scope.tower.aux;
+        let url = PageData.getServer + "purpose=tiles&section=" + section.toLowerCase() + "&id=" + $scope.tower;
         $http.jsonp(url).then(function (response) {
             $scope.tiles = response.data.tiles;
         }, function (response) {
             switch (section) {
                 case 'Company':
-                    $scope.tiles = [{name:'Dynamic', aux:'1500'},{name:'Static', aux:'650'}, {name:'Tesla', aux:'1485'}];
+                    $scope.tiles = [{name:'Dynamic', aux:'1500'},{name:'Static', aux:'650'}];
                     break;
                 case 'Event':
-                    $scope.tiles = [{name:'ThermoDynamic', aux:'Dynamic'}];
+                    $scope.tiles = [{name:'Theme', aux:'Dynamic'}];
                     break;
                 case 'Employee':
                     $scope.tiles = [{name:'Maxi Volv', aux:'CEO of Dynamic'}];
@@ -78,11 +77,8 @@ app.controller("TowerCtrl", function ($scope, $http, $location, PageData) {
         // Generate URL to retrieve bubble data
         let purpose = "purpose=bubble";
         let section = "section=" + $scope.selection[index].section.toLowerCase();
-        let name = "name=" + tile.name;
-        let aux = "aux=" + tile.aux;
-        let tname = "tname=" + $scope.tower.name;
-        let taux = "taux=" + $scope.tower.aux;
-        let url = PageData.getServer + purpose + "&" + section + "&" + name + "&" + aux + "&" + tname + "&" + taux;
+        let id = "id=" + tile.id;
+        let url = PageData.getServer + purpose + "&" + section + "&" + id;
         url = encodeURI(url); // Sanitize String
         // Get bubble data
         $http.jsonp(url).then(function (response) {
@@ -115,18 +111,18 @@ app.controller("TowerCtrl", function ($scope, $http, $location, PageData) {
         switch(section) {
             case "Company":
                 // Store relevant data
-                PageData.setCompany({name: $scope.currentChoice.name, aux: $scope.currentChoice.reception || $scope.currentChoice.aux});
+                PageData.setCompany($scope.currentChoice.id);
 
                 // Use $location to open new page
                 $location.path('/company');
                 break;
             case "Event":
-                PageData.setEvent({name: $scope.currentChoice.name, aux: $scope.currentChoice.host || $scope.currentChoice.aux});
+                PageData.setEvent($scope.currentChoice.id);
 
                 $location.path('/event');
                 break;
             case "Employee":
-                PageData.setEmployee({name: $scope.currentChoice.name, aux: $scope.currentChoice.title || $scope.currentChoice.aux});
+                PageData.setEmployee($scope.currentChoice.id);
                 // TODO Send additional data to load the company page
 
                 $location.path('/company#employee');
