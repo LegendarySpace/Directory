@@ -27,7 +27,7 @@ app.controller("TowerCtrl", function ($scope, $http, $location, PageData) {
     $scope.loadTiles = function(section) {
         // Retrieve tile data
         $scope.tiles = [];
-        let url = PageData.getServer + "purpose=tiles&section=" + section.toLowerCase() + "&id=" + $scope.tower;
+        let url = PageData.getServer + "purpose=tiles&section=" + section.toLowerCase() + "&tower=" + $scope.tower;
         $http.jsonp(url).then(function (response) {
             $scope.tiles = response.data.tiles;
         }, function (response) {

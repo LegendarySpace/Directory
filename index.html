@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--suppress HtmlUnknownAttribute -->
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="DirectoryCSS.css">
@@ -12,10 +13,14 @@
         <script src="CompanyCtrl.js"></script>
     </head>
 
-    <body id="frame" ng-app="Directory" ng-controller="FrameController">
+    <body id="frame" ng-app="Directory" ng-controller="FrameCtrl">
         <div id="header">
             <!-- contains centered logo and right aligned sign in button/user -->
-            <div><input type="button" id="login" value="Log In" ng-click="login.display = true" /></div>
+            <div>
+                <input ng-if="!user.display" type="button" id="login" value="Log In" ng-click="login.display = true" />
+                <span ng-if="user.display" ng-click="">{{user.name}}<img src="Images/FoxLogo.png" /></span>
+                <!-- TODO allow logout on user click -->
+            </div>
             <div style="background-image: url(Images/FoxFLogo.png)"></div>
         </div>
         <div ng-if="login.display" ng-include src="'login.html'"></div>

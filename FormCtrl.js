@@ -1,5 +1,5 @@
 
-app.controller("FormController", function($scope, $http, PageData) {
+app.controller("FormCtrl", function($scope, $http, PageData) {
     $scope.form = PageData.getForm();
     // if form.empty() close modal
     if ($scope.form.content.empty()) $scope.form.display = false;

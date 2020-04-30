@@ -116,6 +116,7 @@ app.factory('PageData', function () {
     }
 });
 
-app.controller("FrameController", function ($scope, $http, PageData) {
+app.controller("FrameCtrl", function ($scope, $http, PageData) {
     $scope.login = {display: false};
+    $scope.user = {display: false, name: null, img: "Images/fox.jpg"};
 });

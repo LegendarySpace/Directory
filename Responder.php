@@ -8,7 +8,7 @@
     $password = "SfKHOiolSYO3Yh";
     $dbname = "epiz_25453908_Directory";
     function sendError($str) {
-        http_response_code(500);
+        http_response_code(404);
         echo "{$str}\n" ?? "Item not found\n";
         die();
     }
@@ -40,31 +40,6 @@
             $id = "{$id}{$alphanumeric[$randDigit]}";
         }
         return $id;
-    }
-    function hasID($obj) {
-        if (empty($obj) || $obj['id'] === null) return false;
-        else return true;
-    }
-    function getID($obj, $connect, $table) {
-        if(empty($obj)||empty($table)) return false;
-        // If it has an id use that instead to fill the others TODO
-        // Convert aux to table column based on what table is used
-        $auxArray = array('Towers'=>'Location','Companies'=>'Reception','Events'=>'Host','Employees'=>'Title','Users'=>'Password');
-        $sql = "SELECT AccountID FROM {$table} WHERE Name='{$obj['name']}' AND {$auxArray[$table]}='{$obj['aux']}'";
-        if($table === 'Employees') {
-            $name = str_split("/[\s,]+/", $obj['name']);
-            $sql = "SELECT AccountID FROM {$table} WHERE FirstName='{$name[0]}' AND LastName='{$name[1]}' AND {$auxArray[$table]}='{$obj['aux']}'";
-        }
-        if(hasID($obj)) $sql = "SELECT * FROM {$table} WHERE AccountID={$obj['id']}";
-        $result = $connect->query($sql);
-        if($result->num_rows > 0) {
-            // TODO Update to do deeper search, currently returns the first one it finds
-            $row = $result->fetch_assoc();
-            if (hasID($obj)) {$obj['name'] = $row['name']; $obj['aux'] = $row[$auxArray[$table]];}
-            else $obj['id'] = $row['AccountID'];
-            return $row['AccountID'];
-        }
-        return false;
     }
 
     /**
@@ -102,6 +77,7 @@
                             $content = array("username"=>'',"password"=>'');
                             break;
                         case 'register':
+                            // TODO simpler if I separate tower and company from registration
                             $main = array("first name"=>null,"last name"=>null,"username"=>null,"password"=>null);
                             $tower = array("name"=>null,"location"=>null,"management company"=>null,"number"=>null,"email"=>null,"image"=>null,"details"=>null);
                             $company = array("name"=>null,"suite"=>array(),"reception"=>null,"number"=>null,"email"=>null,"slogan"=>null,"image"=>null,"details"=>null);
@@ -165,7 +141,7 @@
                     }
                     //  if any are empty send error
                     if (empty($splashArray) || empty($sectionsArray) || $admin === null) sendError("Error Loading Splash");
-                    else sendData(array('splash'=>$splashArray, 'sections'=>$sectionsArray, 'admin'=>false));
+                    else sendData(array('splash'=>$splashArray, 'sections'=>$sectionsArray, 'admin'=>$admin));
                     break;
 
                 case 'tiles':
@@ -177,7 +153,6 @@
                     $tower = (!empty($_GET['tower']))? $_GET['tower']: null;
                     $company = (!empty($_GET['company']))? $_GET['company']: null;
 
-                    // switch through section
                     switch ($section) {
                         case 'tower':
                             $sql = 'SELECT AccountID, Name, Location FROM Towers';
@@ -189,7 +164,7 @@
                             }
                             break;
                         case 'company':
-                            if($id) $additional = "TowerID='{$id}'";
+                            if($tower) $additional = "TowerID='{$tower}'";
 
                             $sql = 'SELECT AccountID, Name, Reception FROM Companies';
                             if ($additional) $sql = "{$sql} WHERE {$additional}";
@@ -201,12 +176,24 @@
                             }
                             break;
                         case 'event':
-                            // if !empty(towerName) set $additional to 'TowerID=$towerid'
-                            // if !empty(companyName) if !empty($additional) use $additional with %companyid, set $additional to 'CompanyID=$companyid'
-                            if($tower) $additional = "TowerID='{$tower}'";
-                            if($company) $additional = (empty($additional))? "CompanyID='{$company}'": "{$additional} AND CompanyID='{$company}'";
+                            // TODO if tower retrieve all events associated with the tower or any company in the tower.
+                            // handle filtering on client side.
+                            if($tower) $additional = "TowerID='{$tower}' AND";
+                            if($company) $additional = (empty($additional))? "CompanyID='{$company}'": "{$additional} CompanyID='{$company}'";
+                            // TODO Get all companies in the tower and use the to check for events
+                            if ($tower) {
+                                // For loop through companies adding them to additional
+                                $query = "SELECT AccountID FROM Companies WHERE TowerID='{$tower}'";
+                                $res = $conn->query($query);
+                                if($res->num_rows > 0) {
+                                    // Set additional to contain all companies
+                                    while ($row = $res->fetch_assoc()) {
+                                        $additional = "{$additional} OR CompanyID='{$row['AccountID']}'";
+                                    }
+                                }
+                            }
 
-                            $sql = "SELECT AccountID, Name, Host FROM Events WHERE AccountID={$id}";
+                            $sql = "SELECT AccountID, Name, Host FROM Events";
                             if(!empty($additional)) $sql = "{$sql} WHERE {$additional}";
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
@@ -217,8 +204,7 @@
                             break;
                         case 'employee':
                             // $tower and $company are mutually exclusive
-                            // if !empty(companyName) set $additional to 'CompanyID=$companyid'
-                            // if !empty(towerName) set $additional to each company with 'TowerID=$towerid'
+                            // Either set the specific company or all possible companies
                             if ($company) $additional = "CompanyID='{$company}'";
                             elseif ($tower) {
                                 // For loop through companies adding them to additional
@@ -233,6 +219,7 @@
                             }
 
                             // TODO Employees needs to be public to view unless by admin
+                            // TODO Need a way to define security to have access to all employees but limit their data
                             $sql = "SELECT AccountID, FirstName, LastName, Title FROM Employees WHERE Public=true";
                             if(!empty($additional)) $sql = "{$sql} AND ({$additional})";
                             $result = $conn->query($sql);
@@ -251,7 +238,6 @@
                     break;
 
                 case 'bubble':
-                    // TODO If $_GET['name'] or $_GET['aux'] is empty fail
                     // Set universal variables
                     $section = $_GET['section'];
                     $tileArray = array();
@@ -278,7 +264,7 @@
                             if($tower) $additional = "TowerID='{$tower}'";
 
                             $sql = "SELECT * FROM Companies WHERE AccountID='{$selObj}'";
-                            if($additional) $sql += " AND {$additional}";
+                            if($additional) $sql .= " AND {$additional}";
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
                                 $row = $result->fetch_assoc();
@@ -293,7 +279,7 @@
                             if($company) $additional = (empty($additional))? "CompanyID='{$company}'": "{$additional} AND CompanyID='{$company}'";
 
                             $sql = "SELECT * FROM Events WHERE AccountID='{$selObj}'";
-                            if($additional) $sql += " AND {$additional}";
+                            if($additional) $sql .= " AND {$additional}";
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
                                 $row = $result->fetch_assoc();
@@ -317,7 +303,7 @@
                             }
 
                             $sql = "SELECT * FROM Employees WHERE AccountID='{$selObj}'";
-                            if($additional) $sql += " AND {$additional}";
+                            if($additional) $sql .= " AND {$additional}";
                             $result = $conn->query($sql);
                             if($result->num_rows > 0) {
                                 $row = $result->fetch_assoc();
@@ -360,51 +346,161 @@
             $item = $_POST['item'];
 
             switch($purpose) {
-                case 'Login':
+                case 'login':
                     // Should set the session id if successful
+                    $user = $_POST['username'];
+                    $pass = $_POST['password'];
+                    $sql = "SELECT * FROM Users WHERE Username={$user} AND Password={$pass}";
+                    $result = $conn->query($sql);
+                    if($result->num_rows > 0) {
+                        $row = $result->fetch_assoc();
+                        $_SESSION['userID'] = $row['AccountID'];
+                        // TODO Potentially add icon
+                        sendData(array('name'=>"{$row['FirstName']} {$row['LastName']}"));
+                    } else sendError("Username or Password incorrect");
                     break;
-                case 'Create':
+                case 'create':
                     switch ($item) {
                         case 'user':
                             // Register destination
+                            $user = $_POST["username"];
+                            $pass = $_POST["password"];
+                            $first = $_POST["first name"];
+                            $last = $_POST['last name'];
+                            $userID = generateID();
+                            $sql = "INSERT INTO `Users`(`Username`, `AccountID`, `Password`, `FirstName`, `LastName`, `ImgURL`)
+                                VALUES ({$user},{$userID},{$pass},{$first},{$last},null)";
+                            // Unique action when successful, die to prevent resubmission
+                            if($conn->query($sql) === TRUE) {
+                                sendData(array('name'=>"{$first} {$last}", 'id'=>$userID));
+                            } else {
+                                sendError("Error registering user: " . $conn->error);
+                            }
+                            die();
                             break;
                         case 'tower':
+                            $name = $_POST["name"];
+                            $userID = generateID();
+                            $adminID = $_POST['id'];
+                            $loc = $_POST['location'];
+                            $mgmt = $_POST["management company"];
+                            $phone = $_POST['number'];
+                            $email = $_POST['email'];
+                            $img = null;
+                            $details = $_POST['details'];
+                            $sql = "INSERT INTO `Towers`(`Name`, `AccountID`, `AdminID`, `Location`, `ManagementCompany`,
+                                `ManagementContact`, `ManagementContactEmail`, `ImageURL`, `Details`)
+                                VALUES ({$name},{$userID},{$adminID},{$loc},{$mgmt},{$phone},{$email},{$img},{$details})";
                             break;
                         case 'company':
+                            $name = $_POST["name"];
+                            $userID = generateID();
+                            $adminID = $_POST['id'];
+                            $tower = null; // TODO find way to connect to tower
+                            $suites = implode(", ", $_POST['suites']);
+                            $reception = $_POST['reception'];
+                            $phone = $_POST['number'];
+                            $email = $_POST['email'];
+                            $slogan = $_POST['slogan'];
+                            $img = $_POST['image'];
+                            $details = $_POST['details'];
+                            $sql = "INSERT INTO `Companies`(`Name`, `AccountID`, `AdminID`, `TowerID`, `Suite`, `Reception`,
+                                `ContactNumber`, `ContactEmail`, `Slogan`, `Details`, `ImageURL`) 
+                                VALUES ({$name},{$userID},{$adminID},{$tower},{$suites},{$reception},{$phone},{$email},{$slogan},{$img},{$details})";
                             break;
                         case 'event':
+                            $name = $_POST["name"];
+                            $userID = generateID();
+                            $company = $_POST['company'];
+                            $tower = $_POST['tower'];
+                            $host = $_POST['host'];
+                            $slogan = $_POST['slogan'];
+                            $loc = $_POST['location'];
+                            $details = $_POST['details'];
+                            $sql = "INSERT INTO `Events`(`Name`, `AccountID`, `CompanyID`, `TowerID`, `Host`, `Slogan`, `Location`, `Details`)
+                                VALUES ({$name},{$userID},{$company},{$tower},{$host},{$slogan},{$loc},{$details})";
                             break;
                         case 'employee':
+                            $first = $_POST["first name"];
+                            $last = $_POST["last name"];
+                            $userID = generateID();
+                            $company = null; // TODO find way to connect company
+                            $title = $_POST['title'];
+                            $phone = $_POST['phone'];
+                            $email = $_POST['email'];
+                            $address = $_POST['address'];
+                            $pub = $_POST['public'];
+                            $img = $_POST['image'];
+                            $sql = "INSERT INTO `Employees`(`FirstName`, `LastName`, `AccountID`, `CompanyID`, `Title`, `Phone`, 
+                                `Email`, `Address`, `Public`, `ImageURL`) 
+                                VALUES ({$first},{$last},{$userID},{$company},{$title},{$phone},{$email},{$address},{$pub},{$img})";;
                             break;
                         default:
+                            sendError("No Item specified to create");
+                    }
+                    if($conn->query($sql) === TRUE) {
+                        echo "item created successfully";
+                    } else {
+                        sendError("Error registering item: " . $conn->error);
                     }
                     break;
-                case 'Update':
+                case 'update':
+                    $userID = $_POST['id'];
+                    $type = $_POST['type'];
+                    $value = $_POST['value'];
+                    if(empty($userID) || empty($type)) sendError("Invalid values");
                     switch ($item) {
                         case 'user':
+                            // TODO convert generalized type to column name
+                            $sql = "UPDATE `Users` SET `{$type}`={$value} WHERE AccountID={$userID}";
                             break;
                         case 'tower':
+                            // TODO convert generalized type to column name
+                            $sql = "UPDATE `Towers` SET `{$type}`={$value} WHERE AccountID={$userID}";
                             break;
                         case 'company':
+                            // TODO convert generalized type to column name
+                            $sql = "UPDATE `Companies` SET `{$type}`={$value} WHERE AccountID={$userID}";
                             break;
                         case 'event':
+                            // TODO convert generalized type to column name
+                            $sql = "UPDATE `Events` SET `{$type}`={$value} WHERE AccountID={$userID}";
                             break;
                         case 'employee':
+                            // TODO convert generalized type to column name
+                            $sql = "UPDATE `Employees` SET `{$type}`={$value} WHERE AccountID={$userID}";
                             break;
                         default:
+                            sendError("No Item specified for update");
+                    }
+                    if($conn->query($sql) === TRUE) {
+                        echo "item updated successfully";
+                    } else {
+                        sendError("Error updating item: " . $conn->error);
                     }
                     break;
-                case 'Remove':
+                case 'remove':
+                    $userID = $_POST['id'];
                     switch ($item) {
                         case 'tower':
+                            $sql = "DELETE FROM `Towers` WHERE AccountID={$userID}";
                             break;
                         case 'company':
+                            $sql = "DELETE FROM `Companies` WHERE AccountID={$userID}";
                             break;
                         case 'event':
+                            $sql = "DELETE FROM `Events` WHERE AccountID={$userID}";
                             break;
                         case 'employee':
+                            $sql = "DELETE FROM `Employees` WHERE AccountID={$userID}";
                             break;
                         default:
+                            sendError("Invalid Item");
+                    }
+                    if($conn->query($sql) === TRUE) {
+                        echo "Item successfully removed";
+                    } else {
+                        sendError("Error removing item: " . $conn->error);
                     }
                     break;
                 default:
