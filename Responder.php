@@ -3,7 +3,6 @@
     // when logged in store userID in session variable
     if (empty($_SESSION['userID'])) $_SESSION['userID'] = 'NONE';
 
-    $database = include('config.php');
     function sendError($str) {
         http_response_code(404);
         echo "{$str}\n" ?? "Item not found\n";

@@ -4,7 +4,49 @@
     <list default="true" id="14a2288f-cb27-425a-bc37-05306fe19a89" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CompanyCtrl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DirectoryCSS.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FormCtrl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/AnimalLogos.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/AnimalLogos2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/BlindCatLogo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/CheetahLogo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/ChimeraLogo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/DailyPlanet.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/DragonLogo.jfif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/DynamicLogo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/EagleLogo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/FoxFLogo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/FoxFireLogo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/FoxIceLogo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/FoxLogo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/FoxLogo2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/FoxTailLogo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/FreeMindLogo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/MammothLogo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/NaturalHairLogo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/ParrotLogo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/PolyWolfLogo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/SpinFoxLogo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/TigerLogo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Tower.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Tower1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Tower2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/Tower3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/WayneTower.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/WolfPackLogo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/WomanLogo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/WomanLogo2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/plus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LandingCtrl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LoginCtrl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainDisplay.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Responder.php" beforeDir="false" afterPath="$PROJECT_DIR$/Responder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ServiceModule.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TowerCtrl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/form.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/login.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +92,9 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP" />
   <component name="ProjectId" id="1aGwVUAX56BtwkGzgPY7176iw31" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -69,6 +114,11 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Users\Brian\Documents\Directory\application\views\old" />
+    </key>
   </component>
   <component name="RestClientSettings">
     <option name="REQUEST_HISTORY">
@@ -340,7 +390,7 @@
       <workItem from="1586898830130" duration="41120000" />
       <workItem from="1587105809400" duration="4194000" />
       <workItem from="1587111917893" duration="47652000" />
-      <workItem from="1587440992426" duration="38824000" />
+      <workItem from="1587440992426" duration="39471000" />
     </task>
     <servers />
   </component>
@@ -376,6 +426,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="734" y="167" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1586501789470" />
+    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1588676621203">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1588676621203" />
     <state x="707" y="376" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1586728220616">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -400,10 +454,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1587490306839" />
-    <state x="794" y="443" key="NewPhpFileDialog" timestamp="1588268360844">
+    <state x="794" y="443" key="NewPhpFileDialog" timestamp="1588683745138">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="794" y="443" key="NewPhpFileDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1588268360844" />
+    <state x="794" y="443" key="NewPhpFileDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1588683745138" />
     <state x="427" y="179" key="SettingsEditor" timestamp="1587441240117">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

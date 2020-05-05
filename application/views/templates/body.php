@@ -9,6 +9,8 @@
                 <span ng-switch-when="admin"></span><!-- Hide admin -->
                 <span ng-switch-when="img"></span><!-- Hide img -->
                 <span ng-switch-default>{{ text }}</span>
+
+                <!-- TODO edit button visibility should be controlled by PHP -->
                 <span ng-show="splash.admin" ng-click="edit.target = type; edit.value = text">&#9998;</span>
             </span>
             <span ng-hide="edit.target !== type" ng-switch="type">
@@ -33,12 +35,14 @@
                 <h3>{{tile.name}}</h3>
                 <h4>{{tile.aux}}</h4>
             </div>
+            <!-- TODO create button visibility should be controlled by PHP -->
             <div ng-if="admin && currentSection !== 'Tower' && currentSection !== 'Company'" class="displayTile" ng-click="newTile(currentSection)">
                 <img src="Images/plus.png" />
             </div>
         </div>
         <div class="bubble" ng-hide="sDisplay !== 'Bubble'">
             <!-- TODO If section = event or employee allow editing. Editing should deploy the create modal filled out -->
+            <!-- TODO bubble edit visibility should be controlled by PHP -->
             <div ng-repeat="(x,y) in currentChoice" ng-switch="x">
                 <span ng-switch-when="id"></span><!-- Hide id -->
                 <span ng-switch-default>{{x | capitalize}}: {{y}}</span>
@@ -48,10 +52,9 @@
 
     </div>
     <div id="footer" class="tileContainer">
+        <!-- Should only display when not at top (use array that's filtered by selection.each(x.section != item))-->
         <div ng-repeat="section in sections" class="displayTile" ng-hide="currentSection === section" ng-click="footerClick(section)">
             <h2>{{section}}</h2>
         </div>
     </div>
-    <!-- TODO Include html for Form Submission modal -->
-    <div ng-if="form.display" ng-include src="'form.html'"></div>
 </div>

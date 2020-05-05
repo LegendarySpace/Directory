@@ -2,6 +2,7 @@
 <!--suppress HtmlUnknownAttribute -->
 <html>
     <head>
+        <title>Faux Directory</title>
         <link rel="stylesheet" type="text/css" href="DirectoryCSS.css">
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.js"></script>
@@ -13,30 +14,17 @@
         <script src="CompanyCtrl.js"></script>
     </head>
 
-    <body id="frame" ng-app="Directory" ng-controller="FrameCtrl">
+    <body id="frame" ng-app="Directory">
         <div id="header">
+            <!-- TODO Switch to nav bar -->
             <!-- contains centered logo and right aligned sign in button/user -->
             <div>
+                <!-- TODO PHP will handle login -->
+                <!-- TODO include login and registration modals in php -->
                 <input ng-if="!user.display" type="button" id="login" value="Log In" ng-click="login.display = true" />
                 <span ng-if="user.display" ng-click="">{{user.name}}<img src="Images/FoxLogo.png" /></span>
                 <!-- TODO allow logout on user click -->
             </div>
             <div style="background-image: url(Images/FoxFLogo.png)"></div>
         </div>
-        <div ng-if="login.display" ng-include src="'login.html'"></div>
-        <div id="sidebar">
-            <div id="Weather" class="sidebar">
-                <!-- Weather -->
-                <a class="weatherwidget-io" href="https://forecast7.com/en/44d98n93d27/minneapolis/?unit=us" data-label_1="MINNEAPOLIS" data-days="5" data-theme="original" >MINNEAPOLIS</a>
-                <script>
-                    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
-                </script>
-            </div>
-            <div id="Navigation" class="sidebar">
-                <!-- Navigation -->
-            </div>
-        </div>
-        <div ng-view></div>
-    </body>
-
-</html>
+        <div class="container">
