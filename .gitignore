@@ -1,2 +1,37 @@
 AttemptGET.http
-database.php
+
+# ignore everything not unique to application
+user_guide/
+system/
+application/cache/
+application/core/
+application/helpers/
+application/hooks/
+application/language/
+application/libraries/
+application/logs/
+application/third_party/
+application/views/errors/
+application/**/index.html
+.editorconfig
+readme.rst
+license.txt
+index.php
+contributing.md
+composer.json
+
+
+# ignore all unused images 
+application/assets/images/unused_assets/
+
+# ignore database and all unused config files
+application/config/*.php
+application/config/database.php
+!application/config/autoload.php
+!application/config/config.php
+!application/config/routes.php
+
+# delete instead of ignore
+application/controllers/Welcome.php
+application/views/welcome_message.php
+application/views/old/

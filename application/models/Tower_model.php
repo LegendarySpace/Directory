@@ -12,10 +12,10 @@
 
         public function get_tiles($id = FALSE) {
             if(!$id) {
-                $query = this->db->get('Towers');
+                $query = $this->db->get('Towers');
                 return $query->result_array();
             } else {
-                $query = this->db->get_where('Towers', array('AccountID' => $id));
+                $query = $this->db->get_where('Towers', array('AccountID' => $id));
                 return $query->row_array();
             }
         }
@@ -33,7 +33,7 @@
                 'Details' => $this->input->post('details')
             );
 
-            return this->db->insert('Towers', $data);
+            return $this->db->insert('Towers', $data);
         }
 
         public function update_tower($id = FALSE) {
@@ -50,7 +50,7 @@
             );
 
             $this->db->where('AccountID', $id);
-            return this->db->update('Towers', $data);
+            return $this->db->update('Towers', $data);
         }
 
         public function delete_tower($id = FALSE) {
