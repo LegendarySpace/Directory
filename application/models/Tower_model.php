@@ -1,62 +1,69 @@
 <?php
-    class Tower_model extends CI_Model{
-        public function __construct(){
-            $this->load->database();
-        }
+    class Tower_model extends Directory_API {
+		public function __construct()
+		{
+			parent::__construct();
+			$this->table = 'Towers';
+			$this->proper = array(
+				'Name' => 'name',
+				'AdminID' => 'admin',
+				'Location' => 'location',
+				'ManagementCompany' => 'management company',
+				'ManagementContact' => 'phone',
+				'ManagementContactEmail' => 'email',
+				'ImageURL' => 'image',
+				'Details' => 'details'
+			);
+		}
 
-        pulic function get_splash($id = FALSE) {
-            if (!$id) return null;
-            $query = $this->db-get_where('Towers', array('AccountID' => $id));
-            return $query->row_array();
-        }
+		public function get_splash($id = FALSE)
+		{
+			$data = $this->proper;
 
-        public function get_tiles($id = FALSE) {
-            if(!$id) {
-                $query = $this->db->get('Towers');
-                return $query->result_array();
-            } else {
-                $query = $this->db->get_where('Towers', array('AccountID' => $id));
-                return $query->row_array();
-            }
-        }
+			return $this->splash($id, $data);
+		}
 
-        public function create_tower() {
-            // Retrieve POST data and transmit it
-            $data = array(
-                'Name' => $this->input->post('name'),
-                'AdminID' => $this->input->post('id'),
-                'Location' => $this->input->post('location'),
-                'ManagementCompany' => $this->input->post('management company'),
-                'ManagementContact' => $this->input->post('number'),
-                'ManagementContactEmail' => $this->input->post('email'),
-                'ImageURL' => null,
-                'Details' => $this->input->post('details')
+		public function get_tiles($id = FALSE)
+		{
+			$data = null;
+
+			if ($id) $data = $this->proper;
+			else $data = array(
+				// Tile values
+				'Name' => 'name',
+				'AccountID' => 'id',
+				'Location' => 'aux'
+			);
+
+			return $this->tiles($id, $data);
+		}
+
+		public function item_struct()
+        {
+            // Array used by page to build forms
+            return array(
+                'name',
+                'id',
+                'admin',
+                'location',
+                'management',
+                'phone',
+                'email',
+                'image',
+                'details'
             );
-
-            return $this->db->insert('Towers', $data);
         }
 
-        public function update_tower($id = FALSE) {
-            // Retrieve POST data and transmit it
-            $data = array(
-                'Name' => $this->input->post('name'),
-                'AdminID' => $this->input->post('id'),
-                'Location' => $this->input->post('location'),
-                'ManagementCompany' => $this->input->post('management company'),
-                'ManagementContact' => $this->input->post('number'),
-                'ManagementContactEmail' => $this->input->post('email'),
-                'ImageURL' => null,
-                'Details' => $this->input->post('details')
-            );
+        public function create_item() {
+			$data = $this->proper;
 
-            $this->db->where('AccountID', $id);
-            return $this->db->update('Towers', $data);
+            return $this->create($data);
         }
 
-        public function delete_tower($id = FALSE) {
-            if(!id) return false;
-            $this->db->where('AccountID', $id);
-            $this->db->delete('Towers');
-            return true;
+        public function update_item($id = FALSE) {
+            $data = $this->proper;
+
+            return $this->update($id, $data);
         }
+
     }

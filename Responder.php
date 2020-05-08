@@ -56,7 +56,7 @@
         $purpose = $_GET["purpose"];
         if(!empty($purpose)) {
             // Open connection to database
-            $conn = new mysqli($database['host'], $database['user'], $database['pass'], $database['name']);
+            $conn = new mysqli('host', 'user', 'pass', 'name');
             if($conn->connect_error) {
                 sendError("Error connecting to SQL: ".$conn->connect_error);
                 die("Connection Failed: " . $conn->connect_error);
@@ -336,7 +336,7 @@
         $purpose = $_POST["purpose"];
         if(!empty($purpose)) {
             // Open connection to database
-            $conn = new mysqli($database['host'], $database['user'], $database['pass'], $database['name']);
+            $conn = new mysqli('host', 'user', 'pass', 'name');
             if($conn->connect_error) {
                 die("Connection Failed: " . $conn->connect_error);
             }
