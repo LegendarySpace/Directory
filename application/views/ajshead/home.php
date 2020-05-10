@@ -1,2 +1,3 @@
 
-<div ng-controller="assets/js/FrameCtrl">
+<div ng-controller="LandingCtrl" class="container">
+	<?php /* TODO insert login modal */ ?>

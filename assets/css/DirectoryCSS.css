@@ -33,19 +33,19 @@
     display: inline-block;
 }
 
-#login {
-    float: right;
-    height: 60%;
-    margin: 10px;
-    width: 40%;
-}
-
 #header>div {
     width: 33%;
     float: right;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+}
+
+#login {
+	float: right;
+	height: 60%;
+	margin: 10px;
+	width: 40%;
 }
 
 .content {
@@ -213,10 +213,6 @@
 [selected].displayTile:active {
     top: 3px;
     box-shadow: 0 2px 0 0 var(--selectedTileShadow);
-}
-
-.slideEdit {
-    
 }
 
 .bubble {

@@ -1,4 +1,4 @@
-AttemptGET.http
+APITest.http
 
 # ignore everything not unique to application
 user_guide/
@@ -12,7 +12,7 @@ application/libraries/
 application/logs/
 application/third_party/
 application/views/errors/
-application/**/index.html
+index.html
 .editorconfig
 readme.rst
 license.txt
@@ -22,7 +22,7 @@ composer.json
 
 
 # ignore all unused images 
-application/assets/images/unused_assets/
+# **/unused_assets/
 
 # ignore database and all unused config files
 application/config/*.php
@@ -32,6 +32,4 @@ application/config/database.php
 !application/config/routes.php
 
 # delete instead of ignore
-application/controllers/Welcome.php
-application/views/welcome_message.php
 application/views/old/

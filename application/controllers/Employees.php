@@ -1,6 +1,6 @@
 <?php
 
-
+require_once APPPATH.'controllers/D_Controller.php';
 class Employees extends D_Controller
 {
 	// ******************************** //
@@ -8,6 +8,7 @@ class Employees extends D_Controller
 	// ******************************** //
 	public function __construct()
 	{
+		parent::__construct();
 		$this->model = $this->employee_model;
 	}
 

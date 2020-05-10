@@ -1,5 +1,6 @@
 <?php
 
+require_once APPPATH.'controllers/D_Controller.php';
     class Homes extends D_Controller{
 
     	public function __construct()
@@ -14,8 +15,8 @@
 				'sub'=>'Surprisingly real'
 			);
             $sections = array(
-            	'Tower',
-				'Event');
+            	'Towers',
+				'Events');
 			if (empty($splash) || empty($sections)) show_404();
 			else return $this->jsonp_return(array('splash'=>$splash, 'sections'=>$sections));
         }

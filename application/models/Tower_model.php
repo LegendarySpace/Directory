@@ -1,8 +1,9 @@
 <?php
+
+require_once APPPATH.'models/Directory_API.php';
     class Tower_model extends Directory_API {
 		public function __construct()
 		{
-			parent::__construct();
 			$this->table = 'Towers';
 			$this->proper = array(
 				'Name' => 'name',

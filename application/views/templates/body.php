@@ -1,16 +1,14 @@
 
 <!--suppress HtmlUnknownAttribute -->
-<div id="LandingBody" class="content" style="background-image: url('{{background}}')">
+<div class="content" style='background-image: url("assets/images/{{background}}")'>
     <div class="splash text" ng-hide="selection.length > 0">
         <div ng-repeat="(type, text) in splash">
             <span ng-hide="edit.target === type" ng-switch="type">
                 <span ng-switch-when="message" class="title">{{ text }}</span>
                 <span ng-switch-when="name" class="title">{{ text }}</span>
-                <span ng-switch-when="admin"></span><!-- Hide admin -->
-                <span ng-switch-when="img"></span><!-- Hide img -->
                 <span ng-switch-default>{{ text }}</span>
 
-                <!-- TODO edit button visibility should be controlled by PHP -->
+                <?php /* TODO edit button visibility should be controlled by PHP */ ?>
                 <span ng-show="splash.admin" ng-click="edit.target = type; edit.value = text">&#9998;</span>
             </span>
             <span ng-hide="edit.target !== type" ng-switch="type">
@@ -30,29 +28,26 @@
             </div>
         </div>
         <div class="tileGroup tileContainer" ng-hide="sDisplay !== 'Tiles'">
-            <!-- Figure out how to sort by selected values -->
+            <?php // Figure out how to sort by selected values in angularjs ?>
             <div ng-repeat="tile in tiles" class="displayTile" ng-selected="currentChoice.name === tile.name" ng-click="chooseTile(tile)">
                 <h3>{{tile.name}}</h3>
                 <h4>{{tile.aux}}</h4>
             </div>
-            <!-- TODO create button visibility should be controlled by PHP -->
-            <div ng-if="admin && currentSection !== 'Tower' && currentSection !== 'Company'" class="displayTile" ng-click="newTile(currentSection)">
-                <img src="Images/plus.png" />
+                <?php /* TODO edit button visibility should be controlled by PHP and based on login credentials */ ?>
+            <div class="displayTile" ng-click="newTile(currentSection)">
+                <img src="<?php echo site_url(); ?>assets/images/plus.png" />
             </div>
         </div>
         <div class="bubble" ng-hide="sDisplay !== 'Bubble'">
-            <!-- TODO If section = event or employee allow editing. Editing should deploy the create modal filled out -->
-            <!-- TODO bubble edit visibility should be controlled by PHP -->
+                <?php /* TODO edit button visibility should be controlled by PHP and based on login credentials */ ?>
             <div ng-repeat="(x,y) in currentChoice" ng-switch="x">
-                <span ng-switch-when="id"></span><!-- Hide id -->
                 <span ng-switch-default>{{x | capitalize}}: {{y}}</span>
             </div>
             <div><span class="link" ng-click="linkPage(currentSection)">Go To {{currentSection}} Page</span></div>
         </div>
-
     </div>
     <div id="footer" class="tileContainer">
-        <!-- Should only display when not at top (use array that's filtered by selection.each(x.section != item))-->
+        <?php /* Should only display when not at top (use array that's filtered by selection.each(x.section != item)) */ ?>
         <div ng-repeat="section in sections" class="displayTile" ng-hide="currentSection === section" ng-click="footerClick(section)">
             <h2>{{section}}</h2>
         </div>

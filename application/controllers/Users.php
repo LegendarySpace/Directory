@@ -1,5 +1,6 @@
 <?php
 
+require_once APPPATH.'controllers/D_Controller.php';
 class Users extends D_Controller
 {
 	// ******************************** //
@@ -7,6 +8,7 @@ class Users extends D_Controller
 	// ******************************** //
 	public function __construct()
 	{
+		parent::__construct();
 		$this->model = $this->user_model;
 	}
 

@@ -1,6 +1,6 @@
 <?php
 
-
+require_once APPPATH.'controllers/D_Controller.php';
 class Events extends D_Controller
 {
 	// ******************************** //
@@ -8,6 +8,7 @@ class Events extends D_Controller
 	// ******************************** //
 	public function __construct()
 	{
+		parent::__construct();
 		$this->model = $this->event_model;
 	}
 
