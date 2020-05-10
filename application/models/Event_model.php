@@ -1,11 +1,10 @@
 <?php
 
-
+require_once APPPATH.'models/Directory_API.php';
 class Event_model extends Directory_API
 {
 	public function __construct()
 	{
-		parent::__construct();
 		$this->table = 'Events';
 		$this->proper = array(
 			'Name' => 'name',

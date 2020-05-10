@@ -1,6 +1,6 @@
 
 app.controller("LandingCtrl", function($scope, $http, $location, PageData) {
-    $http.jsonp(PageData.getServer + 'purpose=splash&page=landing')
+    $http.jsonp(PageData.getServer('splash'))
         .then(function (response) {
             // response.data = [splash[], sections[], admin]
             $scope.sections = response.data.sections;
@@ -13,7 +13,7 @@ app.controller("LandingCtrl", function($scope, $http, $location, PageData) {
             $scope.splash.admin = false;
             // Execute on error
         });
-    $scope.background = 'Images/Tower.jpg';
+    $scope.background = 'Tower.jpg';
     $scope.form = {display: false, content: null, type: null};
     $scope.selection = []; // Tiles in Selected [{section, choice}]
     $scope.currentSection = null; // Section to display [null, Tower, Event+]
@@ -28,7 +28,7 @@ app.controller("LandingCtrl", function($scope, $http, $location, PageData) {
         // if(!$scope.tile[section]) server call
         // else $scope.tiles = $scope.tile[section]
         $scope.tiles = [];
-        let url = PageData.getServer + 'purpose=tiles&section=' + section.toLowerCase();
+        let url = PageData.getServer(section.toLowerCase() + '/tiles');
         $http.jsonp(url).then(function (response) {
                 $scope.tiles = response.data.tiles;
             }, function (response) {
@@ -74,10 +74,7 @@ app.controller("LandingCtrl", function($scope, $http, $location, PageData) {
         if(index > -1) $scope.selection[index].choice = tile.name;
 
         // Generate URL to retrieve bubble data
-        let purpose = "purpose=bubble";
-        let section = "section=" + $scope.selection[index].section.toLowerCase();
-        let id = "id=" + tile.id;
-        let url = PageData.getServer + purpose + '&' + section + '&' + id;
+        let url = PageData.getServer($scope.currentSection.toLowerCase() + '/bubble/' + tile.id);
         url = encodeURI(url); // Sanitize String
         // Get bubble data
         $http.jsonp(url).then(function (response) {
@@ -107,7 +104,8 @@ app.controller("LandingCtrl", function($scope, $http, $location, PageData) {
         $scope.currentSection = section;
     };  // click function from footer
     $scope.linkPage = function(section, choice) {
-        switch (section) {
+    	$location.path(section.toLowerCase() + '/' + $scope.currentChoice.id);
+        /*switch (section) {
             case "Tower":
                 // Store relevant data
                 PageData.setTower($scope.currentChoice.id);
@@ -122,14 +120,15 @@ app.controller("LandingCtrl", function($scope, $http, $location, PageData) {
                 // Use $location to open new page
                 $location.path('/event');
                 break;
-        }
+        }*/
     };
     $scope.newTile = function (section) {
         // TODO Create new item
+		/* ** Display new item form, pass in need variables **
         // GET content for form data
         $scope.form.content = null;
         $scope.form.type = section;
-        let url = PageData.getServer() + 'purpose=form&item='+ section;
+        let url = PageData.getServer + 'purpose=form&item='+ section;
         $http.jsonp(url).then(function (response) {
             $scope.form.content = response.data;
         }, function (response) {
@@ -140,19 +139,23 @@ app.controller("LandingCtrl", function($scope, $http, $location, PageData) {
             PageData.getForm($scope.form);
             $scope.form.display = true;
         }
+		 */
     };
     $scope.addItem = function () {
         // TODO POST data to server depending on type
-        let url = PageData.getServer() + 'item=' + $scope.form.context;
+		/* ** TODO Complete overhaul **
+        let url = PageData.getServer + 'item=' + $scope.form.context;
         $http.post(url, JSON.stringify($scope.form.content))
             .then(function (response) {
 
             }, function (response) {
 
             });
+		 */
     };
     $scope.applyEdit = function (type) {
         // apply the change if different
+		/* ** TODO Complete Overhaul **
         if($scope.splash[type] !== $scope.edit.value) {
             $scope.splash[type] = $scope.edit.value;
             // TODO Send update to server
@@ -160,5 +163,6 @@ app.controller("LandingCtrl", function($scope, $http, $location, PageData) {
             // hide the edit menu
             $scope.edit.target = null;
         }
+		 */
     };
 });

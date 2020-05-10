@@ -1,4 +1,6 @@
-    <!-- TODO include form submission modal -->
+
+		<?php /* TODO Insert modal */
+        /* Close container */ ?>
         </div>
     </body>
 

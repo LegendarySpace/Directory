@@ -1,11 +1,10 @@
 <?php
 
-
+require_once APPPATH.'models/Directory_API.php';
 class Company_model extends Directory_API
 {
 	public function __construct()
 	{
-		parent::__construct();
 		$this->table = 'Companies';
 		$this->proper = array(
 			'Name' => 'name',

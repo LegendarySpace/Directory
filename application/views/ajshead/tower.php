@@ -1,3 +1,4 @@
 
-<div ng-controller="assets/js/TowerCtrl">
+<div ng-controller="TowerCtrl" class="container">
+	<?php /* TODO insert login modal */ ?>
 

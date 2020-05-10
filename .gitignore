@@ -1,4 +1,4 @@
-AttemptGET.http
+APITest.http
 
 # ignore everything not unique to application
 user_guide/

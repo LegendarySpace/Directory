@@ -4,6 +4,10 @@ abstract class D_Controller extends CI_Controller
 {
 	// !!IMPORTANT!!  Set model in constructor
 	protected $model = null;
+	public function __construct()
+	{
+		$this->load->database();
+	}
 
 	/*
 	 * Needs an array containing the section Names

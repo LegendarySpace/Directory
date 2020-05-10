@@ -1,9 +1,11 @@
 <?php
 
+require_once APPPATH.'controllers/D_Controller.php';
 class Companies extends D_Controller
 {
 	public function __construct()
 	{
+		parent::__construct();
 		$this->model = $this->company_model;
 	}
 
@@ -11,7 +13,7 @@ class Companies extends D_Controller
 	{
 		// !Important1 All authentication done in PHP
 		$sections = array(
-			'Event',
+			'Events',
 			'Employees'
 		);
 		return $this->get_splash($id, $sections);

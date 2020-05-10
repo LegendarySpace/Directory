@@ -10,10 +10,6 @@ abstract class Directory_API extends CI_Model
 	 */
 	protected $table = null;
 	protected $proper = null;
-	public function __construct()
-	{
-		$this->load->database;
-	}
 
 	public function delete_item($id = FALSE) {
 		if(!id) return false;
