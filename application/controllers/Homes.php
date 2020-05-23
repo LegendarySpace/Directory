@@ -14,11 +14,11 @@ require_once APPPATH.'controllers/D_Controller.php';
             	'message'=>'Welcome to Faux Directory',
 				'sub'=>'Surprisingly real'
 			);
-            $sections = array(
+            $grades = array(
             	'Towers',
 				'Events');
 			if (empty($splash) || empty($sections)) show_404();
-			else return $this->jsonp_return(array('splash'=>$splash, 'sections'=>$sections));
+			else return $this->jsonp_return(array('splash'=>$splash, 'grades'=>$grades));
         }
 
 	}

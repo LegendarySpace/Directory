@@ -2,15 +2,31 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="14a2288f-cb27-425a-bc37-05306fe19a89" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/assets/js/DAController.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/js/HomeCtrl.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/controllers/Companies.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/Companies.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/controllers/D_Controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/D_Controller.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/controllers/Homes.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/Homes.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/controllers/Pages.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/Pages.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/controllers/Towers.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/Towers.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Company_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Company_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Directory_API.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Directory_API.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/ajshead/company.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ajshead/company.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/ajshead/home.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ajshead/home.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/ajshead/tower.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/ajshead/tower.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/templates/body.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/templates/body.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/templates/footer.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/templates/footer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/templates/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/templates/header.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/js/ServiceModule.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/ServiceModule.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution>
       <executable />
@@ -64,7 +80,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/application/models" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/assets/js" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -75,11 +91,12 @@
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Users\Brian\Documents\Directory\application\models" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Users\Brian\Documents\Directory\application\views\old" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Users\Brian\Documents\Directory\assets\js" />
+      <recent name="D:\Users\Brian\Documents\Directory\application\models" />
     </key>
   </component>
   <component name="RestClientSettings">
@@ -416,6 +433,11 @@
       <workItem from="1588934066834" duration="13538000" />
       <workItem from="1589069563014" duration="30000" />
       <workItem from="1589075641384" duration="11256000" />
+      <workItem from="1589165582828" duration="26328000" />
+      <workItem from="1589521536548" duration="14740000" />
+      <workItem from="1589729819757" duration="13617000" />
+      <workItem from="1590256155515" duration="1770000" />
+      <workItem from="1590263918511" duration="9000" />
     </task>
     <servers />
   </component>
@@ -463,10 +485,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="707" y="376" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1920.1040@0.0.1920.1040" timestamp="1586728220616" />
-    <state x="740" y="274" key="FileChooserDialogImpl" timestamp="1586666379867">
+    <state x="740" y="274" key="FileChooserDialogImpl" timestamp="1589164683992">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1586666379867" />
+    <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1589164683992" />
     <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1589042563509">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -499,14 +521,14 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="821" y="417" key="WebDeployment.AddServerDialog.v.1/0.0.1920.1040@0.0.1920.1040" timestamp="1586665778671" />
-    <state x="661" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1589075643937">
+    <state x="661" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1590263923062">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="661" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1589075643937" />
-    <state x="506" y="32" width="737" height="909" key="find.popup" timestamp="1588852413877">
+    <state x="661" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1590263923062" />
+    <state x="558" y="131" width="737" height="909" key="find.popup" timestamp="1589168479318">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="506" y="32" width="737" height="909" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1588852413877" />
+    <state x="558" y="131" width="737" height="909" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1589168479318" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1588925058141">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

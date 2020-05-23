@@ -26,7 +26,7 @@ class Employee_model extends Directory_API
 		return $this->splash($id, $data);
 	}
 
-	public function get_tiles($id = FALSE)
+	public function get_tiles($caller, $id = FALSE)
 	{
 		$data = null;
 
@@ -39,7 +39,7 @@ class Employee_model extends Directory_API
 			'Title' => 'aux'
 		);
 
-		return $this->tiles($id, $data);
+		return $this->tiles($id, $data, $caller);
 	}
 
 	public function item_struct()

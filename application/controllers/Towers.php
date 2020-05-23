@@ -11,11 +11,11 @@ require_once APPPATH.'controllers/D_Controller.php';
 
 		public function splash($id = FALSE) {
             // !important! All authentication done in PHP
-            $sections = array(
+            $grades = array(
             	'Companies',
 				'Events',
 				'Employees');
-			return $this->get_splash($id, $sections);
+			return $this->get_splash($id, $grades);
 			// If $id false or invalid then redirect to parent
         }
     }

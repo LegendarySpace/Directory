@@ -19,6 +19,7 @@ class Company_model extends Directory_API
 		);
 	}
 
+	// Naming is backwards
 	public function get_splash($id = FALSE)
 	{
 		$data = $this->proper;
@@ -26,10 +27,12 @@ class Company_model extends Directory_API
 		return $this->splash($id, $data);
 	}
 
-	public function get_tiles($id = FALSE)
+	// TODO add $caller pass through on other models
+	public function get_tiles($caller, $id = FALSE)
 	{
 		$data = null;
 
+		// if valid id return all normal information, otherwise return restricted list
 		if($id) $data = $this->proper;
 		else $data = array(
 			// Tile values
@@ -38,7 +41,7 @@ class Company_model extends Directory_API
 			'Reception' => 'aux'
 		);
 
-		return $this->tiles($id, $data);
+		return $this->tiles($id, $data, $caller);
 	}
 
 	public function item_struct()

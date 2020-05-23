@@ -14,28 +14,37 @@ abstract class D_Controller extends CI_Controller
 	 */
 	abstract public function splash($id = FALSE);
 
-	public function tiles() {
-		return $this->get_tiles();
+	public function tiles($caller) {
+		return $this->get_tiles($caller);
 	}
 
-	public function bubble($id = FALSE) {
+	public function bubble($caller, $id = FALSE) {
 		if(!id) show_404();
-		return $this->get_tiles($id);
+		return $this->get_tiles($caller, $id);
+	}
+
+	public function item() {
+		if (empty($this->model)) show_404();
+		$item = $this->model->item_struct();
+		if ($item) return jsonp_return($item);
 	}
 
 	public function create() {
 		if (empty($this->model)) show_404();
 		if ($this->model->create_item()) return "Item Successfully Created";
+		else return "Failed to create item";
 	}
 
 	public function update($id) {
 		if (empty($this->model)) show_404();
 		if ($this->model->update_item($id)) return "Item Successfully Updated";
+		else return "Failed to update item";
 	}
 
 	public function delete($id) {
 		if (empty($this->model)) show_404();
 		if ($this->model->delete_item($id)) return "Item Successfully Deleted";
+		else return "Failed to delete item";
 	}
 
 	protected function get_splash($id, $sections) {
@@ -43,15 +52,14 @@ abstract class D_Controller extends CI_Controller
 		$splash = $this->model->get_splash($id);
 
 		if (empty($splash) || empty($sections)) show_404();
-		else return $this->jsonp_return(array('splash'=>$splash, 'sections'=>$sections));
+		else return $splash;
 	}
 
-	protected function get_tiles($id = FALSE, $raw = FALSE) {
+	protected function get_tiles($caller, $id) {
 		if (empty($this->model)) show_404();
-		$tiles = $this->model->get_tiles($id);
+		$tiles = $this->model->get_tiles($caller, $id);
 
 		if (empty($tiles)) show_404();
-		elseif ($raw) return $tiles;
 		else return $this->jsonp_return($tiles);
 	}
 

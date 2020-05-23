@@ -22,7 +22,7 @@ class User_model extends Directory_API
 		return $this->splash($id, $data);
 	}
 
-	public function get_tiles($id = FALSE)
+	public function get_tiles($caller, $id = FALSE)
 	{
 		$data = null;
 
@@ -33,6 +33,8 @@ class User_model extends Directory_API
 			'AccountID' => 'id',
 			'ImageURL' => 'aux'
 		);
+        
+        return $this->tiles($id, $data, $caller);
 	}
 
 	public function item_struct()

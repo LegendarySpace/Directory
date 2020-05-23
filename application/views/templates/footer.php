@@ -1,6 +1,5 @@
 
-		<?php /* TODO Insert modal */
-        /* Close container */ ?>
+		<?php /* Close container */ ?>
         </div>
     </body>
 

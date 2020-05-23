@@ -29,8 +29,17 @@ abstract class Directory_API extends CI_Model
 		return $data;
 	}
 
-	protected function tiles($id = FALSE, $properties) {
+	protected function tiles($id = FALSE, $properties, $caller) {
 		$result = null;
+		if (!empty($caller)) {
+			// TODO for each class in caller check it against properties to align names
+			// then add where clause to $this->db
+			foreach ($caller as $key=>$value) {
+				// if $properties value contains $key, replace $key with $property key
+				this->db->where($key, $value);
+			}
+		}
+
 		if(!$id) {
 			$query = $this->db->get($this->table);
 			$result = $query->result_array();

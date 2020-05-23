@@ -22,7 +22,7 @@ composer.json
 
 
 # ignore all unused images 
-# **/unused_assets/
+unused_assets/
 
 # ignore database and all unused config files
 application/config/*.php

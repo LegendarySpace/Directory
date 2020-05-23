@@ -9,15 +9,11 @@
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
 
-        <script src="assets/js/ServiceModule.js"></script>
-        <script src="assets/js/FrameCtrl.js"></script>
-        <?php /* TODO Only load needed controller */ ?>
-        <script src="assets/js/LandingCtrl.js"></script>
-        <script src="assets/js/TowerCtrl.js"></script>
-        <script src="assets/js/CompanyCtrl.js"></script>
+        <script src="assets/js/DAController.js"></script>
+        <script src="assets/js/<?php echo $title; ?>Ctrl.js"></script>
     </head>
 
-    <body id="frame" ng-app="Directory">
+    <body ng-app="directory">
         <div id="header">
             <?php /* TODO Switch to nav bar */
             /* contains logo and right aligned sign in button/user */ ?>
@@ -32,4 +28,5 @@
             </div>
             <div style="background-image: url(assets/images/FoxFLogo.png) "></div>
         </div>
-	</body>
+        <div ng-controller="<?php echo $title; ?>Ctrl as vm" class="container">
+            <?php /* TODO Insert login modal */ ?>
